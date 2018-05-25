@@ -378,8 +378,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         {
             try {
                 if ( !input_price.getText().toString().matches("")) {
+                    Log.d("selectedPurchase.getUid",selectedPurchase.getUid().toString());
 
-                    Purchase purchase = new Purchase( product,selectedPurchase.getUid(), Integer.valueOf(input_price.toString()),address);
+                    Purchase purchase = new Purchase( product,selectedPurchase.getUid(), Integer.valueOf(input_price.getText().toString()),address);
                     updatePurchase(purchase);
                 }
                 else {
@@ -389,6 +390,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }catch (Exception e){
 
                 Toast.makeText(getApplicationContext(),"Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("Budget", "exception is", e);
 
             }
 
