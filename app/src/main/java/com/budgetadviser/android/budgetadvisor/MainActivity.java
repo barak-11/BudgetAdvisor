@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private DatabaseReference mDatabaseReference;
     private List<Purchase> list_purchases = new ArrayList<>();
     private Purchase selectedPurchase;
-    private  String product;
+    private  String product="";
     private DropdownMenu mDropdownMenu;
     private GridViewAdapter mGridViewAdapter;
     private ArrayList list = new ArrayList() {{
@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 selectedPurchase = purchase;
                 input_price.setText(String.valueOf(purchase.getPrice()));
                 mDropdownMenu.setCurrentTitle(purchase.getName());
+                product=purchase.getName();
             }
         });
 
