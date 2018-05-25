@@ -1,4 +1,5 @@
 package com.budgetadviser.android.budgetadvisor;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -391,6 +392,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Log.e("Budget", "delete error", e);
             }
 
+        }
+        else if(item.getItemId() == R.id.menu_graph){
+            try{
+                Intent intent = new Intent(this, StatsActivity.class);
+                startActivity(intent);
+            }catch (Exception e){
+                Toast.makeText(getApplicationContext(),"Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("Budget", "stats error", e);
+            }
         }
         return true;
     }

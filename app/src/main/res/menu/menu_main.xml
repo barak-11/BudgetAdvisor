@@ -17,4 +17,8 @@
         android:title="Remove"
         android:icon="@drawable/ic_remove"
         app:showAsAction="always"/>
+    <item android:id="@+id/menu_graph"
+        android:title="Graphs"
+        android:icon="@drawable/ic_graph"
+        app:showAsAction="always"/>
 </menu>

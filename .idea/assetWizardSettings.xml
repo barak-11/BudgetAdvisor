@@ -34,7 +34,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/D:/Android/Android%20Studio%203/plugins/android/lib/android.jar!/images/material_design_icons/maps/ic_local_drink_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/D:/Android/Android%20Studio%203/plugins/android/lib/android.jar!/images/material_design_icons/device/ic_graphic_eq_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -44,8 +44,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_beer" />
+                                      <entry key="outputName" value="ic_graph" />
                                       <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="f7f0ff" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -165,6 +166,11 @@
                                 </PersistentState>
                               </value>
                             </entry>
+                          </map>
+                        </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>
