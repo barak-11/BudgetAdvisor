@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
     private String address="";
-    //FusedLocationProviderClient locationClient;
     private Integer budget;
     private Integer currentSpendings;
     private Integer remainedBudget;
@@ -154,9 +153,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         final TextView budget_tv = (TextView) findViewById(R.id.budget);
         remainedBudget = budget - currentSpendings;
         budget_tv.setText(remainedBudget.toString());
-       // Toast.makeText(getApplicationContext(),"list_purchases "+list_purchases.size(), Toast.LENGTH_LONG).show();
-       // Toast.makeText(getApplicationContext(),"negetive_count "+negetive_count.toString(), Toast.LENGTH_LONG).show();
-       // Toast.makeText(getApplicationContext(),"positive_count "+positive_count.toString(), Toast.LENGTH_LONG).show();
 
 
         try {
@@ -217,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 });
     }
     private  void runLocationSettings(){
-        //final TextView latlngNew = (TextView)findViewById(R.id.latLng);
         //Asking permission to access device's location
         ActivityCompat.requestPermissions(MainActivity.this,
                 new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -303,28 +298,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 try {
-
-
                     if (list_purchases.size() > 0)
                         list_purchases.clear();
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         Purchase purchase = new Purchase(postSnapshot.child("name").getValue().toString(), postSnapshot.child("uid").getValue().toString(), Integer.valueOf(postSnapshot.child("price").getValue().toString()), postSnapshot.child("address").getValue().toString());
                         list_purchases.add(purchase);
-                        //Toast.makeText(getApplicationContext(),"currentSpendings "+currentSpendings.toString(), Toast.LENGTH_LONG).show();
                         currentSpendings+=Integer.valueOf(postSnapshot.child("price").getValue().toString());
-
-                        //Toast.makeText(getApplicationContext(),"currentSpending"+Integer.valueOf(postSnapshot.child("price").getValue().toString()), Toast.LENGTH_LONG).show();
                     }
                     final TextView budget_tv = (TextView) findViewById(R.id.budget);
                     remainedBudget = budget - currentSpendings;
                     currentSpendings=0;
                     budget_tv.setText(remainedBudget.toString());
-                    //Toast.makeText(getApplicationContext(),"currentSpendings "+currentSpendings.toString(), Toast.LENGTH_LONG).show();
-                    //for (Purchase purchase : list_purchases){
-                     //   if (purchase.getPrice()!=null)
-                     //   currentSpendings=+purchase.getPrice();
-                    //}
-                    //Toast.makeText(getApplicationContext(),"currentSpending"+currentSpendings.toString(), Toast.LENGTH_LONG).show();
                     ListViewAdapter adapter = new ListViewAdapter(MainActivity.this, list_purchases, getApplicationContext());
                     list_data.setAdapter(adapter);
 
@@ -333,8 +317,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
                 } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "public void onDataChange:" + e.getMessage(), Toast.LENGTH_LONG).show();
-                    //    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "onDataChange() error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e("Budget", "onDataChange() error", e);
+
                 }
             }
 
@@ -369,6 +354,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 createPurchase();
             }
             catch (Exception e){
+                Log.e("Budget", "create error", e);
                 Toast.makeText(getApplicationContext(),"Error:"+e.getMessage(), Toast.LENGTH_LONG).show();
             }
 
@@ -378,7 +364,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         {
             try {
                 if ( !input_price.getText().toString().matches("")) {
-                    Log.d("selectedPurchase.getUid",selectedPurchase.getUid().toString());
 
                     Purchase purchase = new Purchase( product,selectedPurchase.getUid(), Integer.valueOf(input_price.getText().toString()),address);
                     updatePurchase(purchase);
@@ -390,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }catch (Exception e){
 
                 Toast.makeText(getApplicationContext(),"Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
-                Log.e("Budget", "exception is", e);
+                Log.e("Budget", "save error", e);
 
             }
 
@@ -401,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
             catch (Exception e){
                 Toast.makeText(getApplicationContext(),"Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("Budget", "delete error", e);
             }
 
         }
@@ -414,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void updatePurchase(Purchase purchase) {
         mDatabaseReference.child("purchase").child(purchase.getUid()).child("name").setValue(purchase.getName());
-        mDatabaseReference.child("purchase").child(purchase.getUid()).child("price_tag").setValue(purchase.getPrice());
+        mDatabaseReference.child("purchase").child(purchase.getUid()).child("price").setValue(purchase.getPrice());
         mDatabaseReference.child("purchase").child(purchase.getUid()).child("address").setValue(purchase.getAddress());
         clearEditText();
     }
@@ -430,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             sInput_Price=input_price.getText().toString();
         if (address.matches(""))
             address="";
-        
+
             Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address);
             mDatabaseReference.child("purchase").child(purchase.getUid()).setValue(purchase);
             clearEditText();
@@ -441,11 +427,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
-
-        String output;
-        output = parent.getItemAtPosition(i).toString();
-        d("Output",output);
-
 
     }
 
