@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "103003555156",
+    "firebase_url": "https://budget-advisor.firebaseio.com",
+    "project_id": "budget-advisor",
+    "storage_bucket": "budget-advisor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103003555156:android:7a61883d57c8d9a4",
+        "android_client_info": {
+          "package_name": "com.budgetadviser.android.budgetadvisor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103003555156-3lhgqovg8ojile2lndefe3cbdgsmdjhj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.budgetadviser.android.budgetadvisor",
+            "certificate_hash": "439d8ef613ac95d9cae8dce389d9d8d2e00ba9ff"
+          }
+        },
+        {
+          "client_id": "103003555156-adjaub8ea4oak8s8dnh6jvadd2hat9sl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdiNO95f_9FgKpspIQQfOlakNrrLSaHZo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "103003555156-adjaub8ea4oak8s8dnh6jvadd2hat9sl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
