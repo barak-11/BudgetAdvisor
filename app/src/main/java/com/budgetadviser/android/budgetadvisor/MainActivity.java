@@ -421,7 +421,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void createPurchase() {
         //final TextView latlngNew = (TextView)findViewById(R.id.latLng);
-            Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(input_price.getText().toString()),address);
+        String sInput_Price="";
+        if (product.matches(""))
+            product="";
+        if (input_price.getText().toString().matches(""))
+            sInput_Price="0";
+        else
+            sInput_Price=input_price.getText().toString();
+        if (address.matches(""))
+            address="";
+        
+            Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address);
             mDatabaseReference.child("purchase").child(purchase.getUid()).setValue(purchase);
             clearEditText();
     }
