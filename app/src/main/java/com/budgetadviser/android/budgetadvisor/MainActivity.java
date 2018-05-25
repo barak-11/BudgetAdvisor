@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Purchase purchase = (Purchase)adapterView.getItemAtPosition(i);
                 selectedPurchase = purchase;
                 input_price.setText(String.valueOf(purchase.getPrice()));
+                mDropdownMenu.setCurrentTitle(purchase.getName());
             }
         });
 
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             });
 
-            mDropdownMenu = (DropdownMenu) findViewById(R.id.dropdown_menu);
+        mDropdownMenu = (DropdownMenu) findViewById(R.id.dropdown_menu);
             mDropdownMenu.add("Items", customContentView);
 
         //Firebase
