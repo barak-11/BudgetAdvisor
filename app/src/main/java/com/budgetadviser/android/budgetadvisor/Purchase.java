@@ -10,14 +10,15 @@ public class Purchase {
     private String uid;
     private Integer price;
     private String address;
-    private Date dateTime;
+    private String dateTime;
 
-    public Purchase(String name, String uid, Integer price, String address) {
+    public Purchase(String name, String uid, Integer price, String address, String datetime) {
         this.name = name;
         this.uid = uid;
         this.price = price;
         this.address = address;
-        dateTime = Calendar.getInstance().getTime();
+        this.dateTime = datetime;
+        //Calendar.getInstance().getTime()
     }
     public Purchase() {
     }
@@ -26,8 +27,9 @@ public class Purchase {
         return name;
     }
     public String getDate() {
-        return dateTime.toString();
+        return dateTime;
     }
+    //public Date getRegularDate() {return dateTime;}
 
     public void setName(String name) {
         this.name = name;

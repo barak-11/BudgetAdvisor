@@ -47,7 +47,10 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -181,8 +184,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 try {
                     if (list_purchases.size() > 0)
                         list_purchases.clear();
+
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Purchase purchase = new Purchase(postSnapshot.child("name").getValue().toString(), postSnapshot.child("uid").getValue().toString(), Integer.valueOf(postSnapshot.child("price").getValue().toString()), postSnapshot.child("address").getValue().toString());
+                        //String date_str = postSnapshot.child("date").toString();
+                        Purchase purchase = new Purchase(postSnapshot.child("name").getValue().toString(), postSnapshot.child("uid").getValue().toString(), Integer.valueOf(postSnapshot.child("price").getValue().toString()), postSnapshot.child("address").getValue().toString(),postSnapshot.child("date").getValue().toString());
                         list_purchases.add(purchase);
                         currentSpendings+=Integer.valueOf(postSnapshot.child("price").getValue().toString());
                     }
@@ -265,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             try {
                 if ( !input_price.getText().toString().matches("")) {
 
-                    Purchase purchase = new Purchase( product,selectedPurchase.getUid(), Integer.valueOf(input_price.getText().toString()),address);
+                    Purchase purchase = new Purchase( product,selectedPurchase.getUid(), Integer.valueOf(input_price.getText().toString()),address, selectedPurchase.getDate());
                     updatePurchase(purchase);
                 }
                 else {
@@ -396,6 +404,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mDatabaseReference.child("purchase").child(purchase.getUid()).child("name").setValue(purchase.getName());
         mDatabaseReference.child("purchase").child(purchase.getUid()).child("price").setValue(purchase.getPrice());
         mDatabaseReference.child("purchase").child(purchase.getUid()).child("address").setValue(purchase.getAddress());
+        mDatabaseReference.child("purchase").child(purchase.getUid()).child("date").setValue(purchase.getDate());
         clearEditText();
     }
 
@@ -411,7 +420,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (address.matches(""))
             address="";
 
-            Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address);
+            Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address,Calendar.getInstance().getTime().toString());
             mDatabaseReference.child("purchase").child(purchase.getUid()).setValue(purchase);
             clearEditText();
     }
