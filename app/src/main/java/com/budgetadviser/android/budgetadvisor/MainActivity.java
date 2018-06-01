@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -59,20 +61,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private EditText input_price;
-    private ListView list_data;
+    private DropdownMenu mDropdownMenu;
     private ProgressBar circular_progress;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private List<Purchase> list_purchases = new ArrayList<>();
     private Purchase selectedPurchase;
     private  String product="";
-    private DropdownMenu mDropdownMenu;
     private GridViewAdapter mGridViewAdapter;
     private ArrayList list = new ArrayList() {{
         add(new DropdownListItem(1, "Item 1"));
         add(new DropdownListItem(2, "Item 2"));
     }};
-    private ArrayList productsList = createMockList(15, true,false);
+    private ArrayList productsList = createProductsList(15, true,false);
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
 
@@ -83,10 +84,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Integer currentSpendings;
     private Integer remainedBudget;
 
+    RecyclerView rvContacts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //line below makes sure that the widgets won't move when the keyboard visible
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
@@ -102,21 +106,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         currentSpendings=0;
         circular_progress = (ProgressBar)findViewById(R.id.circular_progress);
         input_price = (EditText)findViewById(R.id.price_tag);
-        list_data = (ListView)findViewById(R.id.list_data);
-        list_data.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Purchase purchase = (Purchase)adapterView.getItemAtPosition(i);
-                selectedPurchase = purchase;
-                input_price.setText(String.valueOf(purchase.getPrice()));
-                mDropdownMenu.setCurrentTitle(purchase.getName());
-                product=purchase.getName();
-            }
-        });
-
+    //Set items in dropdown
             mGridViewAdapter = new GridViewAdapter(this, productsList);
-
             View customContentView = getLayoutInflater().inflate(R.layout.ddm_custom_content, null, false);
             GridView gridView = (GridView) customContentView.findViewById(R.id.ddm_custom_content_gv);
             gridView.setAdapter(mGridViewAdapter);
@@ -134,13 +126,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mDropdownMenu = (DropdownMenu) findViewById(R.id.dropdown_menu);
             mDropdownMenu.add("Items", customContentView);
 
-        //Firebase
-        try {
-            initFirebase();
-            addEventFirebaseListener();
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+
 
         Integer negetive_count=0;
         Integer positive_count=0;
@@ -156,7 +142,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         final TextView budget_tv = (TextView) findViewById(R.id.budget);
         remainedBudget = budget - currentSpendings;
         budget_tv.setText(remainedBudget.toString());
+        //Firebase
+        try {
+            initFirebase();
+            addEventFirebaseListener();
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
 
+        rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        rvContacts.setLayoutManager(llm);
+        PurchaseAdapter pAdapter = new PurchaseAdapter(list_purchases);
+        rvContacts.setAdapter( pAdapter );
 
         try {
             runLocationSettings();
@@ -169,132 +168,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    private void getLastLocation() throws IOException{
-
-        //final TextView latlngNew = (TextView)findViewById(R.id.latLng);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
 
 
-
-                            Geocoder geocoder;
-                            List<Address> addresses;
-                            double latitude = location.getLatitude();
-                            double longitude = location.getLongitude();
-                            geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
-
-                            try {
-                                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                                address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                                String city = addresses.get(0).getLocality();
-                                String state = addresses.get(0).getAdminArea();
-                                String country = addresses.get(0).getCountryName();
-                                String postalCode = addresses.get(0).getPostalCode();
-                                String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-                                Log.d("debug",address+","+city+","+state+","+country+","+postalCode+","+knownName);
-                                //latlngNew.setText(address);
-                            }
-                            catch (Exception e){
-                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-
-
-                        }
-                        else {
-
-                            Toast.makeText(getApplicationContext(),"location is null", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-    }
-    private  void runLocationSettings(){
-        //Asking permission to access device's location
-        ActivityCompat.requestPermissions(MainActivity.this,
-                new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                1);
-        mFusedLocationClient = getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-    }
-    private ArrayList createMockList(int count, boolean hasEmpty, boolean mock) {
-        ArrayList list = new ArrayList();
-        if (mock==false){
-            list.add(new DropdownListItem(0, "Beer", true, true));
-            list.add(new DropdownListItem(1, "Food"));
-            list.add(new DropdownListItem(2, "Tickets"));
-            list.add(new DropdownListItem(3, "Breakfast"));
-            list.add(new DropdownListItem(3, "Lunch"));
-            list.add(new DropdownListItem(3, "Dinner"));
-            list.add(new DropdownListItem(4, "Snacks"));
-            list.add(new DropdownListItem(5, "Transportation"));
-            list.add(new DropdownListItem(6, "Groceries"));
-            list.add(new DropdownListItem(7, "Cloths"));
-            list.add(new DropdownListItem(8, "Gifts"));
-            list.add(new DropdownListItem(9, "Other"));
-
-        }
-        else{
-            if (hasEmpty) {
-                list.add(new DropdownListItem(0, "不限", true, true));
-            }
-            for (int i = 1; i <= count; i++) {
-                list.add(new DropdownListItem(10 + i, "Item-1-" + i));
-            }
-        }
-
-
-        return list;
-    }
-    // This method checks for location updates
-    protected void startLocationUpdates() {
-
-        // Create the location request to start receiving updates
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-
-        // Create LocationSettingsRequest object using location request
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequest);
-        LocationSettingsRequest locationSettingsRequest = builder.build();
-
-        // Check whether location settings are satisfied
-        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
-        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
-        settingsClient.checkLocationSettings(locationSettingsRequest);
-
-
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
-        mFusedLocationClient = getFusedLocationProviderClient(this);
-        getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        // do work here
-                        onLocationChanged(locationResult.getLastLocation());
-                    }
-                },
-                Looper.myLooper());
-    }
 
     private void addEventFirebaseListener() {
         //Progressing
         circular_progress.setVisibility(View.VISIBLE);
-        list_data.setVisibility(View.INVISIBLE);
 
         mDatabaseReference.child("purchase").addValueEventListener(new ValueEventListener() {
             @Override
@@ -312,11 +191,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     remainedBudget = budget - currentSpendings;
                     currentSpendings=0;
                     budget_tv.setText(remainedBudget.toString());
-                    ListViewAdapter adapter = new ListViewAdapter(MainActivity.this, list_purchases, getApplicationContext());
-                    list_data.setAdapter(adapter);
+
+                    rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
+                    PurchaseAdapter pAdapter = new PurchaseAdapter(list_purchases);
+                    // Attach the adapter to the recyclerview to populate items
+
+                    pAdapter.SetOnItemClickListener(new PurchaseAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View v, int position, String id) {
+                            System.out.println("onItemClick MainActivity" + id);
+
+                            Purchase purchase = list_purchases.get(position);
+                            selectedPurchase=purchase;
+                            product=purchase.getName();
+                            input_price.setText(String.valueOf(purchase.getPrice()));
+                            mDropdownMenu.setCurrentTitle(purchase.getName());
+                        }
+                    });
+                    LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
+                    llm.setOrientation(LinearLayoutManager.VERTICAL);
+                    rvContacts.setLayoutManager(llm);
+                    rvContacts.setAdapter(pAdapter);
+                    // Set layout manager to position the items
 
                     circular_progress.setVisibility(View.INVISIBLE);
-                    list_data.setVisibility(View.VISIBLE);
 
 
                 } catch (Exception e) {
@@ -404,7 +302,92 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         return true;
     }
+    private void getLastLocation() throws IOException{
 
+        //final TextView latlngNew = (TextView)findViewById(R.id.latLng);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+
+
+
+                            Geocoder geocoder;
+                            List<Address> addresses;
+                            double latitude = location.getLatitude();
+                            double longitude = location.getLongitude();
+                            geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+
+                            try {
+                                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                                String city = addresses.get(0).getLocality();
+                                String state = addresses.get(0).getAdminArea();
+                                String country = addresses.get(0).getCountryName();
+                                String postalCode = addresses.get(0).getPostalCode();
+                                String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+                                Log.d("debug",address+","+city+","+state+","+country+","+postalCode+","+knownName);
+                                //latlngNew.setText(address);
+                            }
+                            catch (Exception e){
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
+
+                        }
+                        else {
+
+                            Toast.makeText(getApplicationContext(),"location is null", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+    private  void runLocationSettings(){
+        //Asking permission to access device's location
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                1);
+        mFusedLocationClient = getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+    }
+    private ArrayList createProductsList(int count, boolean hasEmpty, boolean mock) {
+        ArrayList list = new ArrayList();
+        if (mock==false){
+            list.add(new DropdownListItem(0, "Beer", true, true));
+            list.add(new DropdownListItem(1, "Food"));
+            list.add(new DropdownListItem(2, "Tickets"));
+            list.add(new DropdownListItem(3, "Breakfast"));
+            list.add(new DropdownListItem(3, "Lunch"));
+            list.add(new DropdownListItem(3, "Dinner"));
+            list.add(new DropdownListItem(4, "Snacks"));
+            list.add(new DropdownListItem(5, "Transportation"));
+            list.add(new DropdownListItem(6, "Groceries"));
+            list.add(new DropdownListItem(7, "Cloths"));
+            list.add(new DropdownListItem(8, "Gifts"));
+            list.add(new DropdownListItem(9, "Other"));
+
+        }
+        else{
+            if (hasEmpty) {
+                list.add(new DropdownListItem(0, "不限", true, true));
+            }
+            for (int i = 1; i <= count; i++) {
+                list.add(new DropdownListItem(10 + i, "Item-1-" + i));
+            }
+        }
+
+
+        return list;
+    }
     private void deletePurchase(Purchase selectedPurchase) {
         mDatabaseReference.child("purchase").child(selectedPurchase.getUid()).removeValue();
         clearEditText();
@@ -476,5 +459,41 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 */
         // You can now create a LatLng Object for use with maps
         //LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+    }
+
+    // This method checks for location updates
+    protected void startLocationUpdates() {
+
+        // Create the location request to start receiving updates
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        // Create LocationSettingsRequest object using location request
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        // Check whether location settings are satisfied
+        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+        mFusedLocationClient = getFusedLocationProviderClient(this);
+        getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        // do work here
+                        onLocationChanged(locationResult.getLastLocation());
+                    }
+                },
+                Looper.myLooper());
     }
 }
