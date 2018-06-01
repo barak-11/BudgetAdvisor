@@ -15,12 +15,12 @@ import java.util.List;
  * Created by lwang on 2017/2/28.
  */
 
-public class GridViewAdapter extends BaseAdapter {
+public class DropdownViewAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<DropdownListItem> mList;
 
-    public GridViewAdapter(Context context, List<DropdownListItem> list) {
+    public DropdownViewAdapter(Context context, List<DropdownListItem> list) {
         mContext=context;
         mList = list;
     }

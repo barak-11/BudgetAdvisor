@@ -21,7 +21,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private List<Purchase> list_purchases = new ArrayList<>();
     private Purchase selectedPurchase;
     private  String product="";
-    private GridViewAdapter mGridViewAdapter;
+    private DropdownViewAdapter mDropdownViewAdapter;
     private ArrayList list = new ArrayList() {{
         add(new DropdownListItem(1, "Item 1"));
         add(new DropdownListItem(2, "Item 2"));
@@ -108,14 +107,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         input_price = (EditText)findViewById(R.id.price_tag);
 
     //Set items in dropdown
-            mGridViewAdapter = new GridViewAdapter(this, productsList);
+            mDropdownViewAdapter = new DropdownViewAdapter(this, productsList);
             View customContentView = getLayoutInflater().inflate(R.layout.ddm_custom_content, null, false);
             GridView gridView = (GridView) customContentView.findViewById(R.id.ddm_custom_content_gv);
-            gridView.setAdapter(mGridViewAdapter);
+            gridView.setAdapter(mDropdownViewAdapter);
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    DropdownListItem item = mGridViewAdapter.setSelectedItem(position);
+                    DropdownListItem item = mDropdownViewAdapter.setSelectedItem(position);
                     Log.d("item Text:",item.getText());
                     product = item.getText();
                     mDropdownMenu.setCurrentTitle(item.isEmptyItem() ? "Select Product" : item.getText());

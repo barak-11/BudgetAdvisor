@@ -3,31 +3,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
-    android:layout_marginLeft="10dp"
-    android:orientation="horizontal">
+    android:layout_marginStart="10dp"
+    android:orientation="vertical"
+    android:padding="5dp">
 
-    <TextView
-        android:id="@+id/purchase_name"
-        style="@style/TextAppearance.AppCompat.Medium"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textStyle="bold"
-        tools:text="My First Post" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/purchase_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        tools:text="lorem" />
+        <TextView
+            android:id="@+id/purchase_name"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textStyle="bold"
+            tools:text="My First Post" />
+
+        <TextView
+            android:id="@+id/purchase_price"
+            android:layout_width="181dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            tools:text="lorem" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/purchase_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         tools:text="address" />
+
+    <TextView
+        android:id="@+id/purchase_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+
+        tools:text="date" />
 
 </LinearLayout>

@@ -1,6 +1,8 @@
 package com.budgetadviser.android.budgetadvisor;
 
 
+import java.util.Calendar;
+import java.util.Date;
 
 public class Purchase {
 
@@ -8,18 +10,23 @@ public class Purchase {
     private String uid;
     private Integer price;
     private String address;
+    private Date dateTime;
 
     public Purchase(String name, String uid, Integer price, String address) {
         this.name = name;
         this.uid = uid;
         this.price = price;
         this.address = address;
+        dateTime = Calendar.getInstance().getTime();
     }
     public Purchase() {
     }
 
     public String getName() {
         return name;
+    }
+    public String getDate() {
+        return dateTime.toString();
     }
 
     public void setName(String name) {

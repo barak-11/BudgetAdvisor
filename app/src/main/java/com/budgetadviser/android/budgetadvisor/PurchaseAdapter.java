@@ -37,9 +37,10 @@ public class PurchaseAdapter extends
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public TextView nameTextView;
-        public TextView priceTextView;
-        public TextView addressTextView;
+         TextView nameTextView;
+         TextView priceTextView;
+         TextView addressTextView;
+        TextView dateTextView;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -51,6 +52,7 @@ public class PurchaseAdapter extends
             nameTextView = (TextView) itemView.findViewById(R.id.purchase_name);
             priceTextView = (TextView) itemView.findViewById(R.id.purchase_price);
             addressTextView = (TextView) itemView.findViewById(R.id.purchase_address);
+            dateTextView = (TextView) itemView.findViewById(R.id.purchase_date);
             itemView.setOnClickListener(this);
         }
 
@@ -97,6 +99,8 @@ public class PurchaseAdapter extends
         textViewPrice.setText(purchase.getPrice().toString());
         TextView textViewAddress = viewHolder.addressTextView;
         textViewAddress.setText(purchase.getAddress().toString());
+        TextView dateViewAddress = viewHolder.dateTextView;
+        dateViewAddress.setText(purchase.getDate());
 
     }
 
