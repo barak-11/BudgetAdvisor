@@ -337,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 }
 
                                 TextView budget_tv = (TextView) findViewById(R.id.budget);
+                                budget=Integer.valueOf(input.getText().toString());
                                 String budgeString = String.valueOf(Integer.valueOf(input.getText().toString())-currentSpendings);
                                 budget_tv.setText(budgeString);
 
