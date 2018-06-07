@@ -1,6 +1,7 @@
 package com.budgetadviser.android.budgetadvisor;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +75,13 @@ public class DropdownViewAdapter extends BaseAdapter {
             mTextView.setText(item.getText());
             if (item.isSelected()) {
                 mTextView.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
-                mTextView.setBackgroundResource(R.drawable.common_google_signin_btn_icon_light);
+               // mTextView.setBackgroundResource(R.drawable.common_google_signin_btn_icon_light_focused);
+                GradientDrawable gd = new GradientDrawable();
+                gd.setColor(mContext.getResources().getColor(R.color.colorWhite)); // Changes this drawbale to use a single color instead of a gradient
+                gd.setCornerRadius(5);
+                gd.setStroke(1, 0xFF000000);
+                //TextView tv = (TextView)findViewById(R.id.textView1);
+                mTextView.setBackground(gd);
             } else {
                 mTextView.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
                 mTextView.setBackgroundResource(R.drawable.common_full_open_on_phone);

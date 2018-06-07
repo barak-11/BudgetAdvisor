@@ -1,6 +1,8 @@
 package com.budgetadviser.android.budgetadvisor;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -29,7 +31,17 @@ public class Purchase {
     public String getDate() {
         return dateTime;
     }
-    //public Date getRegularDate() {return dateTime;}
+    public Date getRegularDate() {
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
+        Date date = new Date();
+        try {
+            date = format.parse(dateTime);
+            System.out.println(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 
     public void setName(String name) {
         this.name = name;

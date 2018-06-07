@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -25,11 +26,15 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StatsActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
@@ -88,46 +93,70 @@ public class StatsActivity extends AppCompatActivity {
                     if (list_purchases.size() > 0)
                         list_purchases.clear();
 
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-
 
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        //String date_str = postSnapshot.child("date").toString();
                         Purchase purchase = new Purchase(postSnapshot.child("name").getValue().toString(), postSnapshot.child("uid").getValue().toString(), Integer.valueOf(postSnapshot.child("price").getValue().toString()), postSnapshot.child("address").getValue().toString(),postSnapshot.child("date").getValue().toString());
                         list_purchases.add(purchase);
                     }
-                    //System.out.println("list_purchases is:"+list_purchases.size());
 
-                    // generate Dates
+                    Map<String,List<Purchase>> datesWithPurchasesMap = new HashMap<>();
+                    Map<String,Integer> datesWithPurchasesCounterMap = new HashMap<>();
+                    Integer countPurchases=0;
+                    Integer currentPurchases=0;
                     Calendar calendar = Calendar.getInstance();
-                    //System.out.println("calendar is:"+calendar);
-                    //System.out.println("getTime() is:"+calendar.getTime());
+                    String dayOfTheWeek,day,monthString,monthNumber,year;
+                    String mapKey;
+
+                    for (Purchase pur : list_purchases){
+                        dayOfTheWeek = (String) DateFormat.format("EEEE", pur.getRegularDate()); // Thursday
+                        day          = (String) DateFormat.format("dd",   pur.getRegularDate()); // 20
+                        monthString  = (String) DateFormat.format("MMM",  pur.getRegularDate()); // Jun
+                        monthNumber  = (String) DateFormat.format("MM",   pur.getRegularDate()); // 06
+                        year         = (String) DateFormat.format("yyyy", pur.getRegularDate()); // 2013
+
+                        mapKey = day+"/"+monthString+"/"+year;
+
+                        if (!datesWithPurchasesMap.containsKey(mapKey)){
+                            countPurchases=1;
+                            datesWithPurchasesCounterMap.put(mapKey,countPurchases);
+                            datesWithPurchasesMap.put(mapKey,new ArrayList<Purchase>());
+                            datesWithPurchasesMap.get(mapKey).add(pur);
+                        }
+                        else {
+                            currentPurchases=0;
+                            currentPurchases=datesWithPurchasesCounterMap.get(mapKey);
+                            currentPurchases++;
+                            datesWithPurchasesCounterMap.put(mapKey,currentPurchases);
+
+                            datesWithPurchasesMap.get(mapKey).add(pur);
+                        }
+                    }
+                    System.out.println("datesWithPurchasesCounterMap values are:"+datesWithPurchasesCounterMap.values());
+                    System.out.println("datesWithPurchasesCounterMap keys are:"+datesWithPurchasesCounterMap.keySet());
+                    LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+                    //DataPoint datapoints [] = new DataPoint[];
+
+                    for (String d : datesWithPurchasesCounterMap.keySet()){
+                        series.resetData(new DataPoint[] {});
+                        DataPoint point = new DataPoint(getRegularDate(d), datesWithPurchasesCounterMap.get(d));
+                        System.out.println("getRegularDate(d): "+getRegularDate(d));
+                        series.appendData(point, true,datesWithPurchasesCounterMap.get(d));
+                    }
                     Date d1 = calendar.getTime();
-                    calendar.add(Calendar.DATE, 1);
-                    Date d2 = calendar.getTime();
-                    calendar.add(Calendar.DATE, 1);
-                    Date d3 = calendar.getTime();
+                    System.out.println("d1 calendar: "+d1);
 
 
-
-// you can directly pass Date objects to DataPoint-Constructor
-// this will convert the Date to double via Date#getTime()
-                    LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                            new DataPoint(d1, 1),
-                            new DataPoint(d2, 5),
-                            new DataPoint(d3, 3)
-                    });
 
                     graph.addSeries(series);
 
 // set date label formatter
                     graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(StatsActivity.this));
-                    graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
+                    //graph.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
 
 // set manual x bounds to have nice steps
-                    graph.getViewport().setMinX(d1.getTime());
-                    graph.getViewport().setMaxX(d3.getTime());
-                    graph.getViewport().setXAxisBoundsManual(true);
+                    //graph.getViewport().setMinX(d1.getTime());
+                    //graph.getViewport().setMaxX(d3.getTime());
+                    //graph.getViewport().setXAxisBoundsManual(true);
 
 // as we use dates as labels, the human rounding to nice readable numbers
 // is not necessary
@@ -151,6 +180,17 @@ public class StatsActivity extends AppCompatActivity {
 
             }
         });
+    }
+    public Date getRegularDate(String dateTime) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MMM/yyyy");
+        Date date = new Date();
+        try {
+            date = format.parse(dateTime);
+            System.out.println(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
 }

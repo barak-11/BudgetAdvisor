@@ -1,13 +1,17 @@
 package com.budgetadviser.android.budgetadvisor;
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -177,16 +182,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //Progressing
         circular_progress.setVisibility(View.VISIBLE);
 
-        mDatabaseReference.child("purchase").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("purchase").orderByChild("regularDate/time").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 try {
                     if (list_purchases.size() > 0)
                         list_purchases.clear();
-
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-
 
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         //String date_str = postSnapshot.child("date").toString();
@@ -206,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     pAdapter.SetOnItemClickListener(new PurchaseAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View v, int position, String id) {
-                            System.out.println("onItemClick MainActivity" + id);
 
                             Purchase purchase = list_purchases.get(position);
                             selectedPurchase=purchase;
@@ -217,6 +218,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     });
                     LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
                     llm.setOrientation(LinearLayoutManager.VERTICAL);
+                    llm.setReverseLayout(true);
+                    llm.setStackFromEnd(true);
                     rvContacts.setLayoutManager(llm);
                     rvContacts.setAdapter(pAdapter);
                     // Set layout manager to position the items
@@ -307,6 +310,43 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Log.e("Budget", "stats error", e);
             }
         }
+        else if(item.getItemId() == R.id.menu_settings){
+            try{
+               // Intent intent = new Intent(this, SettingsActivity.class);
+                //startActivity(intent);
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(MainActivity.this);
+                }
+                final EditText input = new EditText(MainActivity.this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setLayoutParams(lp);
+                builder.setView(input); // uncomment this line
+                builder.setTitle("Budget Adviser Settings")
+                        .setMessage("Please set the amount of budget")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Activity myActivity=(Activity)(view.getContext()); // all views have a reference to their context
+                               // SharedPreferences prefs =myActivity.getSharedPreferences(
+                                        //"com.example.app", Context.MODE_PRIVATE);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_dialer)
+                        .show();
+            }catch (Exception e){
+                Toast.makeText(getApplicationContext(),"Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("Budget", "stats error", e);
+            }
+        }
         return true;
     }
     private void getLastLocation() throws IOException{
@@ -369,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ArrayList createProductsList(int count, boolean hasEmpty, boolean mock) {
         ArrayList list = new ArrayList();
         if (mock==false){
-            list.add(new DropdownListItem(0, "Beer", true, true));
+            list.add(new DropdownListItem(0, "Beer", false, false));
             list.add(new DropdownListItem(1, "Food"));
             list.add(new DropdownListItem(2, "Tickets"));
             list.add(new DropdownListItem(3, "Breakfast"));
@@ -380,18 +420,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             list.add(new DropdownListItem(6, "Groceries"));
             list.add(new DropdownListItem(7, "Cloths"));
             list.add(new DropdownListItem(8, "Gifts"));
+            list.add(new DropdownListItem(8, "Drinks"));
+            list.add(new DropdownListItem(8, "Baby Stuff"));
             list.add(new DropdownListItem(9, "Other"));
 
         }
-        else{
-            if (hasEmpty) {
-                list.add(new DropdownListItem(0, "不限", true, true));
-            }
-            for (int i = 1; i <= count; i++) {
-                list.add(new DropdownListItem(10 + i, "Item-1-" + i));
-            }
-        }
-
 
         return list;
     }
@@ -439,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
+    public void onConnected( Bundle bundle) {
 
     }
 
@@ -449,7 +482,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
 
