@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Integer remainedBudget;
 
     RecyclerView rvContacts;
+    SharedPreferences myDBfile; // create a file or return a reference to an exist file
+    SharedPreferences.Editor myEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +110,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setSupportActionBar(toolbar);
 
 
+        myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
+        Integer savedBudget = myDBfile.getInt("Budget", -1);
+
+
         //Control
-        budget=2000;
+        budget= savedBudget == -1 ? 2000 : savedBudget;
+        //budget=2000;
         currentSpendings=0;
         circular_progress = (ProgressBar)findViewById(R.id.circular_progress);
         input_price = (EditText)findViewById(R.id.price_tag);
@@ -134,21 +141,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             mDropdownMenu.add("Items", customContentView);
 
 
-
-        Integer negetive_count=0;
-        Integer positive_count=0;
-        for (Purchase purchase : list_purchases){
-           if (purchase.getPrice()!=null) {
-               currentSpendings = +purchase.getPrice();
-               positive_count++;
-           }
-           else
-               negetive_count++;
-
-        }
-        final TextView budget_tv = (TextView) findViewById(R.id.budget);
-        remainedBudget = budget - currentSpendings;
-        budget_tv.setText(remainedBudget.toString());
         //Firebase
         try {
             initFirebase();
@@ -218,8 +210,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     });
                     LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
                     llm.setOrientation(LinearLayoutManager.VERTICAL);
-                    llm.setReverseLayout(true);
-                    llm.setStackFromEnd(true);
+                    llm.setReverseLayout(true); // in order to display the database records ordered by newest to oldest
+                    llm.setStackFromEnd(true); // in order to display the database records ordered by newest to oldest
                     rvContacts.setLayoutManager(llm);
                     rvContacts.setAdapter(pAdapter);
                     // Set layout manager to position the items
@@ -330,9 +322,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         .setMessage("Please set the amount of budget")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                //Activity myActivity=(Activity)(view.getContext()); // all views have a reference to their context
-                               // SharedPreferences prefs =myActivity.getSharedPreferences(
-                                        //"com.example.app", Context.MODE_PRIVATE);
+                                myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
+                                myEditor = myDBfile.edit();
+                                Integer savedBudget = myDBfile.getInt("Budget", -1);
+
+                                myEditor.putInt("Budget", Integer.valueOf(input.getText().toString()));
+                                myEditor.apply();
+
+                                currentSpendings=0;
+                                for (Purchase purchase : list_purchases){
+                                    if (purchase.getPrice()!=null) {
+                                        currentSpendings +=  purchase.getPrice();
+                                    }
+                                }
+
+                                TextView budget_tv = (TextView) findViewById(R.id.budget);
+                                String budgeString = String.valueOf(Integer.valueOf(input.getText().toString())-currentSpendings);
+                                budget_tv.setText(budgeString);
+
+
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
