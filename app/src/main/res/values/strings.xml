@@ -43,4 +43,5 @@
     <string name="heading_recent">Recent</string>
     <string name="title_activity_fragment">FragmentActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_set_project">SetProjectActivity</string>
 </resources>

@@ -21,8 +21,12 @@
         android:title="Graphs"
         android:icon="@drawable/ic_graph"
         app:showAsAction="never"/>
-    <item android:id="@+id/menu_settings"
-        android:title="Settings"
+    <item android:id="@+id/menu_setBudget"
+        android:title="Set Budget"
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="never"/>
+    <item android:id="@+id/menu_setProject"
+        android:title="Select Proejct"
         android:icon="@drawable/ic_settings"
         app:showAsAction="never"/>
 </menu>

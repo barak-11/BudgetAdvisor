@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    >
     <GridView
         android:id="@+id/ddm_custom_content_gv"
         android:layout_width="match_parent"

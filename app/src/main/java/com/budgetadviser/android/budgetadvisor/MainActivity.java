@@ -1,6 +1,5 @@
 package com.budgetadviser.android.budgetadvisor;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +11,6 @@ import android.os.Build;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -52,10 +51,8 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -90,6 +87,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
     private Integer budget;
     private Integer currentSpendings;
     private Integer remainedBudget;
+    private String projectName;
 
     RecyclerView rvContacts;
     SharedPreferences myDBfile; // create a file or return a reference to an exist file
@@ -112,11 +110,10 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
 
         myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
         Integer savedBudget = myDBfile.getInt("Budget", -1);
-
+        projectName = myDBfile.getString("projectName", "Default Project");
 
         //Control
         budget= savedBudget == -1 ? 2000 : savedBudget;
-        //budget=2000;
         currentSpendings=0;
         circular_progress = (ProgressBar)findViewById(R.id.circular_progress);
         input_price = (EditText)findViewById(R.id.price_tag);
@@ -137,6 +134,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
             });
 
         mDropdownMenu = (DropdownMenu) findViewById(R.id.dropdown_menu);
+
             mDropdownMenu.add("Items", customContentView);
 
 
@@ -165,7 +163,16 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         //startLocationUpdates();
 
     }
-
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
 
 
@@ -187,10 +194,9 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                         String uid_str = postSnapshot.child("uid").getValue().toString();
                         String address_str = postSnapshot.child("address").getValue().toString();
                         String price_str = postSnapshot.child("price").getValue().toString();
-                        Log.d("name_str",name_str);
+                        String project_str = postSnapshot.child("projectName").getValue().toString();
 
-
-                        Purchase purchase = new Purchase(name_str, uid_str, Integer.valueOf(price_str), address_str,date_str);
+                        Purchase purchase = new Purchase(name_str, uid_str, Integer.valueOf(price_str), address_str,date_str,project_str);
                         list_purchases.add(purchase);
                         currentSpendings+=Integer.valueOf(postSnapshot.child("price").getValue().toString());
                     }
@@ -216,6 +222,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                             mDropdownMenu.dismissCurrentPopupWindow();
                         }
                     });
+
                     LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
                     llm.setOrientation(LinearLayoutManager.VERTICAL);
                     llm.setReverseLayout(true); // in order to display the database records ordered by newest to oldest
@@ -249,6 +256,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("price").setValue(purchase.getPrice());
         mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("address").setValue(purchase.getAddress());
         mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("date").setValue(purchase.getDate());
+        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("projectName").setValue(purchase.getProjectName());
         clearEditText();
     }
 
@@ -264,7 +272,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         if (address.matches(""))
             address="";
 
-        Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address,Calendar.getInstance().getTime().toString());
+        Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address,Calendar.getInstance().getTime().toString(),projectName);
         mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).setValue(purchase);
         clearEditText();
     }
@@ -303,7 +311,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
             try {
                 if ( !input_price.getText().toString().matches("")) {
 
-                    Purchase purchase = new Purchase( product,selectedPurchase.getUid(), Integer.valueOf(input_price.getText().toString()),address, selectedPurchase.getDate());
+                    Purchase purchase = new Purchase( product,selectedPurchase.getUid(), Integer.valueOf(input_price.getText().toString()),address, selectedPurchase.getDate(),projectName);
                     updatePurchase(purchase);
                 }
                 else {
@@ -337,7 +345,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                 Log.e("Budget", "stats error", e);
             }
         }
-        else if(item.getItemId() == R.id.menu_settings){
+        else if(item.getItemId() == R.id.menu_setBudget){
             try{
                // Intent intent = new Intent(this, SettingsActivity.class);
                 //startActivity(intent);
@@ -354,7 +362,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                 input.setLayoutParams(lp);
                 builder.setView(input); // uncomment this line
                 builder.setTitle("Budget Adviser Settings")
-                        .setMessage("Please set the amount of budget")
+                        .setMessage("Please set the amount of budget for this project")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
@@ -376,7 +384,6 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                                 String budgeString = String.valueOf(Integer.valueOf(input.getText().toString())-currentSpendings);
                                 budget_tv.setText(budgeString);
 
-
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -390,6 +397,56 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                 Toast.makeText(getApplicationContext(),"Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e("Budget", "stats error", e);
             }
+        }
+        else if(item.getItemId() == R.id.menu_setProject){
+            try{
+                Intent intent = new Intent(this, SetProjectActivity.class);
+                startActivity(intent);
+            }catch (Exception e){
+                Toast.makeText(getApplicationContext(),"Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("Budget", "stats error", e);
+            }
+/*            try{
+
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(MainActivity.this);
+                }
+                final EditText input = new EditText(MainActivity.this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setLayoutParams(lp);
+                builder.setView(input); // uncomment this line
+                builder.setTitle("Budget Adviser Settings")
+                        .setMessage("Please select a name for the project")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
+                                myEditor = myDBfile.edit();
+                                //Integer savedBudget = myDBfile.getInt("Budget", -1);
+
+                                myEditor.putString("projectName", input.getText().toString());
+                                myEditor.apply();
+                                startActivity(getIntent());
+                                finish();
+
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_dialer)
+                        .show();
+            }catch (Exception e){
+                Toast.makeText(getApplicationContext(),"Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("Budget", "stats error", e);
+            }*/
         }
         return true;
     }

@@ -13,16 +13,34 @@ public class Purchase {
     private Integer price;
     private String address;
     private String dateTime;
+    private String projectName;
 
-    public Purchase(String name, String uid, Integer price, String address, String datetime) {
+    public Purchase(String name, String uid, Integer price, String address, String datetime,String projectName) {
         this.name = name;
         this.uid = uid;
         this.price = price;
         this.address = address;
         this.dateTime = datetime;
+        this.projectName=projectName;
         //Calendar.getInstance().getTime()
     }
     public Purchase() {
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public String getName() {

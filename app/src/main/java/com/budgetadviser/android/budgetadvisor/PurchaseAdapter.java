@@ -90,7 +90,7 @@ public class PurchaseAdapter extends
     public void onBindViewHolder(PurchaseAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
         final Purchase purchase = mPurchases.get(position);
-
+        //Log.d("PurchaseAdaper:",purchase.toString());
         // Set item views based on your views and data model
 
         TextView textView = viewHolder.nameTextView;

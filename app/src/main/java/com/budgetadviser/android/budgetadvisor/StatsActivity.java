@@ -1,5 +1,6 @@
 package com.budgetadviser.android.budgetadvisor;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -36,12 +37,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StatsActivity extends AppCompatActivity {
+public class StatsActivity extends BaseActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private List<Purchase> list_purchases = new ArrayList<>();
     private ProgressBar circular_progress;
     private GraphView graph;
+    SharedPreferences myDBfile; // create a file or return a reference to an exist file
+    SharedPreferences.Editor myEditor;
+    private String projectName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,9 @@ public class StatsActivity extends AppCompatActivity {
 
         circular_progress = (ProgressBar)findViewById(R.id.circular_progress);
         graph = (GraphView) findViewById(R.id.graph);
-
+        myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
+        Integer savedBudget = myDBfile.getInt("Budget", -1);
+        projectName = myDBfile.getString("projectName", "Default Project");
 
         try {
             initFirebase();
@@ -85,7 +91,7 @@ public class StatsActivity extends AppCompatActivity {
         circular_progress.setVisibility(View.VISIBLE);
 
 
-        mDatabaseReference.child("purchase").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("purchase").child(getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -95,7 +101,7 @@ public class StatsActivity extends AppCompatActivity {
 
 
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Purchase purchase = new Purchase(postSnapshot.child("name").getValue().toString(), postSnapshot.child("uid").getValue().toString(), Integer.valueOf(postSnapshot.child("price").getValue().toString()), postSnapshot.child("address").getValue().toString(),postSnapshot.child("date").getValue().toString());
+                        Purchase purchase = new Purchase(postSnapshot.child("name").getValue().toString(), postSnapshot.child("uid").getValue().toString(), Integer.valueOf(postSnapshot.child("price").getValue().toString()), postSnapshot.child("address").getValue().toString(),postSnapshot.child("date").getValue().toString(),projectName);
                         list_purchases.add(purchase);
                     }
 
