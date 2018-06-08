@@ -64,7 +64,7 @@ import static android.util.Log.d;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,GoogleApiClient.ConnectionCallbacks,
+public class MainActivity extends BaseActivity implements AdapterView.OnItemSelectedListener,GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private EditText input_price;
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //Progressing
         circular_progress.setVisibility(View.VISIBLE);
 
-        mDatabaseReference.child("purchase").orderByChild("regularDate/time").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("purchase").child(getUid()).orderByChild("regularDate/time").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -182,8 +182,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         list_purchases.clear();
 
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        //String date_str = postSnapshot.child("date").toString();
-                        Purchase purchase = new Purchase(postSnapshot.child("name").getValue().toString(), postSnapshot.child("uid").getValue().toString(), Integer.valueOf(postSnapshot.child("price").getValue().toString()), postSnapshot.child("address").getValue().toString(),postSnapshot.child("date").getValue().toString());
+                        String date_str = postSnapshot.child("date").getValue().toString();
+                        String name_str = postSnapshot.child("name").getValue().toString();
+                        String uid_str = postSnapshot.child("uid").getValue().toString();
+                        String address_str = postSnapshot.child("address").getValue().toString();
+                        String price_str = postSnapshot.child("price").getValue().toString();
+                        Log.d("name_str",name_str);
+
+
+                        Purchase purchase = new Purchase(name_str, uid_str, Integer.valueOf(price_str), address_str,date_str);
                         list_purchases.add(purchase);
                         currentSpendings+=Integer.valueOf(postSnapshot.child("price").getValue().toString());
                     }
@@ -226,21 +233,48 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 }
             }
-
-
-
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
     }
+    private void deletePurchase(Purchase selectedPurchase) {
+        mDatabaseReference.child("purchase").child(getUid()).child(selectedPurchase.getUid()).removeValue();
+        clearEditText();
+    }
 
+    private void updatePurchase(Purchase purchase) {
+        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("name").setValue(purchase.getName());
+        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("price").setValue(purchase.getPrice());
+        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("address").setValue(purchase.getAddress());
+        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("date").setValue(purchase.getDate());
+        clearEditText();
+    }
+
+    private void createPurchase() {
+        //final TextView latlngNew = (TextView)findViewById(R.id.latLng);
+        String sInput_Price="";
+        if (product.matches(""))
+            product="";
+        if (input_price.getText().toString().matches(""))
+            sInput_Price="0";
+        else
+            sInput_Price=input_price.getText().toString();
+        if (address.matches(""))
+            address="";
+
+        Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address,Calendar.getInstance().getTime().toString());
+        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).setValue(purchase);
+        clearEditText();
+    }
     private void initFirebase() {
+
         FirebaseApp.initializeApp(this);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference  = mFirebaseDatabase.getReference();
+
+
     }
 
     @Override
@@ -438,37 +472,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         return list;
     }
-    private void deletePurchase(Purchase selectedPurchase) {
-        mDatabaseReference.child("purchase").child(selectedPurchase.getUid()).removeValue();
-        clearEditText();
-    }
 
-    private void updatePurchase(Purchase purchase) {
-        mDatabaseReference.child("purchase").child(purchase.getUid()).child("name").setValue(purchase.getName());
-        mDatabaseReference.child("purchase").child(purchase.getUid()).child("price").setValue(purchase.getPrice());
-        mDatabaseReference.child("purchase").child(purchase.getUid()).child("address").setValue(purchase.getAddress());
-        mDatabaseReference.child("purchase").child(purchase.getUid()).child("date").setValue(purchase.getDate());
-        clearEditText();
-    }
-
-    private void createPurchase() {
-        //final TextView latlngNew = (TextView)findViewById(R.id.latLng);
-        String sInput_Price="";
-        if (product.matches(""))
-            product="";
-        if (input_price.getText().toString().matches(""))
-            sInput_Price="0";
-        else
-            sInput_Price=input_price.getText().toString();
-        if (address.matches(""))
-            address="";
-
-            Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address,Calendar.getInstance().getTime().toString());
-            mDatabaseReference.child("purchase").child(purchase.getUid()).setValue(purchase);
-            clearEditText();
-    }
     private void clearEditText() {
+
         input_price.setText(String.valueOf(""));
+        mDropdownMenu.setCurrentTitle("Select Product");
     }
 
     @Override
