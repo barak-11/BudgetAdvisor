@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     DropdownListItem item = mDropdownViewAdapter.setSelectedItem(position);
-                    Log.d("item Text:",item.getText());
                     product = item.getText();
                     mDropdownMenu.setCurrentTitle(item.isEmptyItem() ? "Select Product" : item.getText());
                     mDropdownMenu.dismissCurrentPopupWindow();
@@ -206,6 +205,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             product=purchase.getName();
                             input_price.setText(String.valueOf(purchase.getPrice()));
                             mDropdownMenu.setCurrentTitle(purchase.getName());
+                           // DropdownListItem item = mDropdownViewAdapter.setSelectedItem(position);
+                            mDropdownMenu.dismissCurrentPopupWindow();
                         }
                     });
                     LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
@@ -422,16 +423,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             list.add(new DropdownListItem(1, "Food"));
             list.add(new DropdownListItem(2, "Tickets"));
             list.add(new DropdownListItem(3, "Breakfast"));
-            list.add(new DropdownListItem(3, "Lunch"));
-            list.add(new DropdownListItem(3, "Dinner"));
-            list.add(new DropdownListItem(4, "Snacks"));
-            list.add(new DropdownListItem(5, "Transportation"));
-            list.add(new DropdownListItem(6, "Groceries"));
-            list.add(new DropdownListItem(7, "Cloths"));
-            list.add(new DropdownListItem(8, "Gifts"));
-            list.add(new DropdownListItem(8, "Drinks"));
-            list.add(new DropdownListItem(8, "Baby Stuff"));
-            list.add(new DropdownListItem(9, "Other"));
+            list.add(new DropdownListItem(4, "Lunch"));
+            list.add(new DropdownListItem(5, "Dinner"));
+            list.add(new DropdownListItem(6, "Snacks"));
+            list.add(new DropdownListItem(7, "Transportation"));
+            list.add(new DropdownListItem(8, "Groceries"));
+            list.add(new DropdownListItem(9, "Cloths"));
+            list.add(new DropdownListItem(10, "Gifts"));
+            list.add(new DropdownListItem(11, "Drinks"));
+            list.add(new DropdownListItem(12, "Baby Stuff"));
+            list.add(new DropdownListItem(13, "Other"));
 
         }
 
