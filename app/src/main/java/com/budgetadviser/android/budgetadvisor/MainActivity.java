@@ -1,14 +1,17 @@
 package com.budgetadviser.android.budgetadvisor;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Looper;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
@@ -51,11 +54,14 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.util.Log.d;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
@@ -67,6 +73,11 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
     private EditText input_price;
     private DropdownMenu mDropdownMenu;
     private ProgressBar circular_progress;
+    private TextView projectTVtitle;
+    private TextView projectTVoutput;
+    private TextView budgetTVtitle;
+    private TextView budgetTVoutput;
+
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private List<Purchase> list_purchases = new ArrayList<>();
@@ -94,6 +105,10 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
     SharedPreferences.Editor myEditor;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -107,10 +122,28 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         toolbar.setTitle("Budget Adviser");
         setSupportActionBar(toolbar);
 
+        projectTVtitle = findViewById(R.id.project_title);
+        projectTVoutput = findViewById(R.id.project_title_name);
+        budgetTVtitle = findViewById(R.id.budget_title);
+        budgetTVoutput = findViewById(R.id.budget_title_name);
+
+        Typeface myFont = Typeface.createFromAsset(getAssets(),"fonts/Abel-Regular.ttf");
+        projectTVtitle.setTypeface(myFont);
+        projectTVoutput.setTypeface(myFont);
+        budgetTVtitle.setTypeface(myFont);
+        budgetTVoutput.setTypeface(myFont);
+        TextInputLayout textInputLayout= (TextInputLayout) findViewById(R.id.textInputLayoutId);
+        textInputLayout.setTypeface(myFont);
+
 
         myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
         Integer savedBudget = myDBfile.getInt("Budget", -1);
         projectName = myDBfile.getString("projectName", "Default Project");
+
+
+
+
+        projectTVoutput.setText(projectName);
 
         //Control
         budget= savedBudget == -1 ? 2000 : savedBudget;
@@ -134,8 +167,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
             });
 
         mDropdownMenu = (DropdownMenu) findViewById(R.id.dropdown_menu);
-
-            mDropdownMenu.add("Items", customContentView);
+        mDropdownMenu.add("Items", customContentView);
 
 
         //Firebase
@@ -189,18 +221,21 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                         list_purchases.clear();
 
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        String date_str = postSnapshot.child("date").getValue().toString();
-                        String name_str = postSnapshot.child("name").getValue().toString();
-                        String uid_str = postSnapshot.child("uid").getValue().toString();
-                        String address_str = postSnapshot.child("address").getValue().toString();
-                        String price_str = postSnapshot.child("price").getValue().toString();
-                        String project_str = postSnapshot.child("projectName").getValue().toString();
+                        if (postSnapshot.child("projectName").getValue().toString().matches(projectName)){
+                            String date_str = postSnapshot.child("date").getValue().toString();
+                            String name_str = postSnapshot.child("name").getValue().toString();
+                            String uid_str = postSnapshot.child("uid").getValue().toString();
+                            String address_str = postSnapshot.child("address").getValue().toString();
+                            String price_str = postSnapshot.child("price").getValue().toString();
+                            String project_str = postSnapshot.child("projectName").getValue().toString();
 
-                        Purchase purchase = new Purchase(name_str, uid_str, Integer.valueOf(price_str), address_str,date_str,project_str);
-                        list_purchases.add(purchase);
-                        currentSpendings+=Integer.valueOf(postSnapshot.child("price").getValue().toString());
+                            Purchase purchase = new Purchase(name_str, uid_str, Integer.valueOf(price_str), address_str,date_str,project_str);
+                            list_purchases.add(purchase);
+                            currentSpendings+=Integer.valueOf(postSnapshot.child("price").getValue().toString());
+                        }
+
                     }
-                    final TextView budget_tv = (TextView) findViewById(R.id.budget);
+                    final TextView budget_tv = (TextView) findViewById(R.id.budget_title_name);
                     remainedBudget = budget - currentSpendings;
                     currentSpendings=0;
                     budget_tv.setText(remainedBudget.toString());
@@ -379,7 +414,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                                     }
                                 }
 
-                                TextView budget_tv = (TextView) findViewById(R.id.budget);
+                                TextView budget_tv = (TextView) findViewById(R.id.budget_title_name);
                                 budget=Integer.valueOf(input.getText().toString());
                                 String budgeString = String.valueOf(Integer.valueOf(input.getText().toString())-currentSpendings);
                                 budget_tv.setText(budgeString);
@@ -480,8 +515,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                                 String country = addresses.get(0).getCountryName();
                                 String postalCode = addresses.get(0).getPostalCode();
                                 String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-                                Log.d("debug",address+","+city+","+state+","+country+","+postalCode+","+knownName);
-                                //latlngNew.setText(address);
+
+
                             }
                             catch (Exception e){
                                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -612,4 +647,5 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                 },
                 Looper.myLooper());
     }
+
 }

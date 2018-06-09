@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.firebase:firebase-auth:16.0.1'
     implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation 'uk.co.chrisjenx:calligraphy:2.2.0'
 
     // Needed to fix a dependency conflict with FirebaseUI'
 

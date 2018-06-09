@@ -1,5 +1,7 @@
 package com.budgetadviser.android.budgetadvisor;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,6 +38,9 @@ public class SetProjectActivity extends BaseActivity {
     private DatabaseReference mDatabaseReference;
     private List<String> projectNames;
     private Map<String,String> projectNamesMap;
+    SharedPreferences myDBfile;
+    SharedPreferences.Editor myEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,9 +101,7 @@ public class SetProjectActivity extends BaseActivity {
 
                     }
                     projectNames = new ArrayList<String>(projectNamesMap.values());
-                    //Log.d("projectNamesList:",projectNames.get(0));
                     SetProjectAdapter pAdapter = new SetProjectAdapter(projectNames);
-                    // Attach the adapter to the recyclerview to populate items
 
                     LinearLayoutManager llm = new LinearLayoutManager(SetProjectActivity.this);
                     llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -129,4 +134,30 @@ public class SetProjectActivity extends BaseActivity {
 
 
     }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int position = -1;
+        try {
+            position = ((SetProjectAdapter) mRecyclerView.getAdapter()).getPosition();
+        } catch (Exception e) {
+            return super.onContextItemSelected(item);
+        }
+        if(item.getTitle()=="Set Project"){
+            myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
+            myEditor = myDBfile.edit();
+            myEditor.putString("projectName", projectNames.get(position));
+            myEditor.apply();
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+        else if(item.getTitle()==""){
+
+        }else{
+            return false;
+        }
+        return super.onContextItemSelected(item);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.budgetadviser.android.budgetadvisor;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.exblr.dropdownmenu.DropdownMenu;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,13 +44,13 @@ public class PurchaseAdapter extends
          TextView addressTextView;
         TextView dateTextView;
 
+
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
-
             nameTextView = (TextView) itemView.findViewById(R.id.purchase_name);
             priceTextView = (TextView) itemView.findViewById(R.id.purchase_price);
             addressTextView = (TextView) itemView.findViewById(R.id.purchase_address);
@@ -62,6 +64,7 @@ public class PurchaseAdapter extends
 
             mItemClickListener.onItemClick(v, getAdapterPosition(), "id"); //OnItemClickListener mItemClickListener;
         }
+
     }
     public interface OnItemClickListener {
         public void onItemClick(View view, int position, String id);
@@ -109,4 +112,6 @@ public class PurchaseAdapter extends
     public int getItemCount() {
         return mPurchases.size();
     }
+
+
 }
