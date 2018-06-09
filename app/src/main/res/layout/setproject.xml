@@ -21,14 +21,20 @@
         <TextView
             android:id="@+id/project_name"
             style="@style/TextAppearance.AppCompat.Medium"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textStyle="bold"
-            tools:text="My Project" />
+            tools:text="My Project"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+        <TextView
+            android:id="@+id/project_budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="Budget" />
 
     </LinearLayout>
 

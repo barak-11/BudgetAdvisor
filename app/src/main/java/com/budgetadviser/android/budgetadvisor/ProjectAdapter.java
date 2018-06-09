@@ -1,9 +1,7 @@
 package com.budgetadviser.android.budgetadvisor;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +10,17 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class SetProjectAdapter extends RecyclerView.Adapter<SetProjectAdapter.ViewHolder> {
+public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHolder> {
 
 
     private int position;
 
-    private List<String> mProject;
-    public SetProjectAdapter(List<String> projects) {
+    private List<Project> mProject;
+    public ProjectAdapter(List<Project> projects) {
         mProject = projects;
     }
     @Override
-    public SetProjectAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ProjectAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -30,19 +28,20 @@ public class SetProjectAdapter extends RecyclerView.Adapter<SetProjectAdapter.Vi
         View projectView = inflater.inflate(R.layout.setproject, parent, false);
 
         // Return a new holder instance
-        SetProjectAdapter.ViewHolder viewHolder = new SetProjectAdapter.ViewHolder(projectView);
+        ProjectAdapter.ViewHolder viewHolder = new ProjectAdapter.ViewHolder(projectView);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(SetProjectAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(ProjectAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        String currProject = mProject.get(position);
+        Project currProject = mProject.get(position);
 
         // Set item views based on your views and data model
         TextView textView = viewHolder.project_nameTextView;
-        textView.setText(currProject);
-
+        textView.setText(currProject.getName());
+        TextView textViewBudget = viewHolder.project_budgetTextView;
+        textViewBudget.setText(String.valueOf(currProject.getBudget()));
         final ViewHolder finalViewHolder=viewHolder;
         finalViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -57,6 +56,7 @@ public class SetProjectAdapter extends RecyclerView.Adapter<SetProjectAdapter.Vi
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         TextView project_nameTextView;
+        TextView project_budgetTextView;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -66,6 +66,7 @@ public class SetProjectAdapter extends RecyclerView.Adapter<SetProjectAdapter.Vi
             super(itemView);
 
             project_nameTextView = (TextView) itemView.findViewById(R.id.project_name);
+            project_budgetTextView = (TextView) itemView.findViewById(R.id.project_budget);
 
             itemView.setOnLongClickListener(this);
             itemView.setOnCreateContextMenuListener(this);
@@ -91,7 +92,10 @@ public class SetProjectAdapter extends RecyclerView.Adapter<SetProjectAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return mProject.size();
+        if (mProject==null)
+            return 0;
+        else
+            return mProject.size();
     }
     public int getPosition() {
         return position;

@@ -15,10 +15,13 @@
       <change beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
       <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/MainActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/MainActivity.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/PurchaseAdapter.java" afterPath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/PurchaseAdapter.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectActivity.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectAdapter.java" afterPath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectAdapter.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/ProjectActivity.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectAdapter.java" afterPath="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/ProjectAdapter.java" />
       <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_set_project.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_set_project.xml" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/content_set_project.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/content_set_project.xml" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/setproject.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/setproject.xml" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/menu/menu_main.xml" afterPath="$PROJECT_DIR$/src/main/res/menu/menu_main.xml" />
       <change beforePath="$PROJECT_DIR$/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/src/main/res/values/styles.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -48,80 +51,38 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="38" column="38" lean-forward="false" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="38" />
+            <state relative-caret-position="210">
+              <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ProjectCreateDialogFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/ProjectCreateDialogFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-536">
+              <caret line="40" column="9" lean-forward="false" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ProjectActivity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/ProjectActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="430">
+              <caret line="190" column="7" lean-forward="true" selection-start-line="190" selection-start-column="7" selection-end-line="190" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
-              <caret line="169" column="54" lean-forward="false" selection-start-line="169" selection-start-column="54" selection-end-line="169" selection-end-column="54" />
-              <folding>
-                <element signature="e#6366#6870#0" expanded="true" />
-                <element signature="e#6869#6870#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/AndroidManifest.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="15" column="28" lean-forward="false" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
-              <folding>
-                <element signature="e#588#606#0" expanded="true" />
-                <element signature="e#878#908#0" expanded="true" />
-                <element signature="e#1323#1359#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-          <provider editor-type-id="android-manifest">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="370">
-              <caret line="39" column="18" lean-forward="false" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="App.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/App.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="12" column="59" lean-forward="false" selection-start-line="12" selection-start-column="59" selection-end-line="12" selection-end-column="59" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PurchaseAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/PurchaseAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="styles.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/res/values/styles.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <state relative-caret-position="42">
+              <caret line="638" column="0" lean-forward="false" selection-start-line="638" selection-start-column="0" selection-end-line="652" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -132,43 +93,44 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="layoutResourceFile" />
         <option value="Class" />
+        <option value="layoutResourceFile" />
+        <option value="resourceFile" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>list</find>
-      <find>purch</find>
-      <find>SetProjectAdaper</find>
-      <find>layout.</find>
-      <find>onitemc</find>
-      <find>onclick</find>
-      <find>onBindViewHolder</find>
-      <find>onitem</find>
-      <find>intent</find>
-      <find>onCreateContextMenu</find>
-      <find>projectName</find>
-      <find>setOnClickListener</find>
-      <find>projectname</find>
-      <find>onCreateOptionsMenu</find>
-      <find>selectedProject</find>
-      <find>setOnLongClickListener</find>
-      <find>log.d</find>
-      <find>long</find>
-      <find>getPosition</find>
-      <find>budget</find>
-      <find>style</find>
-      <find>input</find>
-      <find>input_price</find>
-      <find>id.budget</find>
-      <find>getAssets</find>
-      <find>items</find>
-      <find>dropdow</find>
-      <find>android:name=&quot;</find>
       <find>mdropdown</find>
+      <find>&quot;items</find>
+      <find>mPurchases</find>
+      <find>createpr</find>
+      <find>mProject</find>
+      <find>belo</find>
       <find>below</find>
+      <find>com.android.support:support</find>
+      <find>list_purchases</find>
+      <find>project_nameTextView</find>
+      <find>android.app.Fragment</find>
+      <find>getsupport</find>
+      <find>fra</find>
+      <find>commit</find>
+      <find>integer.va</find>
+      <find>input_price</find>
+      <find>create</find>
+      <find>budget ad</find>
+      <find>budget adviser</find>
+      <find>shar</find>
+      <find>getSharedPreferences</find>
+      <find>putstring</find>
+      <find>getstring</find>
+      <find>budget_tv</find>
+      <find>projName</find>
+      <find>projectNames</find>
+      <find>onclick</find>
+      <find>visib</find>
+      <find>fab</find>
+      <find>intent</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -2209,20 +2171,28 @@
         <option value="$PROJECT_DIR$/src/main/res/layout/ddm_custom_content.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/Purchase.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/StatsActivity.java" />
-        <option value="$PROJECT_DIR$/src/main/res/menu/menu_main.xml" />
         <option value="$PROJECT_DIR$/src/main/res/layout/content_set_project.xml" />
-        <option value="$PROJECT_DIR$/src/main/res/layout/activity_set_project.xml" />
-        <option value="$PROJECT_DIR$/src/main/res/layout/setproject.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectActivity.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectAdapter.java" />
         <option value="$PROJECT_DIR$/src/main/res/layout/test.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/PurchaseAdapter.java" />
-        <option value="$PROJECT_DIR$/src/main/res/values/styles.xml" />
-        <option value="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" />
-        <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/App.java" />
         <option value="$PROJECT_DIR$/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/Project.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectAdapter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectActivity.java" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/setproject.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/ProjectAdapter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/FullScreenDialogFragment.java" />
+        <option value="$PROJECT_DIR$/src/main/res/drawable/ic_close.xml" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/activity_set_project.xml" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/FullscreenDialogFragment.java" />
+        <option value="$PROJECT_DIR$/src/main/res/values/styles.xml" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/full_screen_dialog.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/MainActivity.java" />
+        <option value="$PROJECT_DIR$/src/main/res/menu/menu_main.xml" />
+        <option value="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/ProjectCreateDialogFragment.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/ProjectActivity.java" />
       </list>
     </option>
   </component>
@@ -2324,13 +2294,19 @@
             <path>
               <item name="app" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="assets" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
             </path>
             <path>
               <item name="app" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="assets" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="fonts" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+              <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
+            </path>
+            <path>
+              <item name="app" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+              <item name="menu" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
             <path>
               <item name="app" type="1abcf292:AndroidViewProjectNode" />
@@ -2559,13 +2535,13 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32788798" sideWeight="0.49785867" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32788798" sideWeight="0.49785867" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290398" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290398" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18254818" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26766595" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32788798" sideWeight="0.49785867" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290398" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -2616,14 +2592,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/BaseActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="8" column="25" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/ddm_custom_content.xml">
       <provider editor-type-id="android-designer2">
         <state />
@@ -2631,14 +2599,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="6" column="4" lean-forward="false" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/Project.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -2651,38 +2611,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/Purchase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding>
-            <element signature="e#769#770#0" expanded="false" />
-            <element signature="e#800#801#0" expanded="false" />
-            <element signature="e#848#849#0" expanded="false" />
-            <element signature="e#888#889#0" expanded="false" />
-            <element signature="e#926#927#0" expanded="false" />
-            <element signature="e#960#961#0" expanded="false" />
-            <element signature="e#1014#1015#0" expanded="false" />
-            <element signature="e#1060#1061#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/StatsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="294">
           <caret line="103" column="336" lean-forward="false" selection-start-line="103" selection-start-column="336" selection-end-line="103" selection-end-column="336" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/menu/menu_main.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="24" column="34" lean-forward="false" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
           <folding />
         </state>
       </provider>
@@ -2720,28 +2652,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/content_set_project.xml">
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="14" column="46" lean-forward="false" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_set_project.xml">
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="39" column="41" lean-forward="false" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/item_post.xml">
       <provider editor-type-id="android-designer2">
         <state />
@@ -2750,48 +2660,6 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/setproject.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-111">
-          <caret line="5" column="19" lean-forward="false" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="95" column="26" lean-forward="false" selection-start-line="95" selection-start-column="15" selection-end-line="95" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#588#589#0" expanded="false" />
-            <element signature="e#623#624#0" expanded="false" />
-            <element signature="e#1611#1835#0" expanded="false" />
-            <element signature="e#1834#1835#0" expanded="false" />
-            <element signature="e#3252#3253#0" expanded="false" />
-            <element signature="e#3290#3291#0" expanded="false" />
-            <element signature="e#3321#3322#0" expanded="false" />
-            <element signature="e#3352#3353#0" expanded="false" />
-            <element signature="e#3396#3397#0" expanded="false" />
-            <element signature="e#3436#3437#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/SetProjectActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="957">
-          <caret line="143" column="53" lean-forward="true" selection-start-line="143" selection-start-column="53" selection-end-line="143" selection-end-column="53" />
-          <folding>
-            <element signature="e#1937#2205#0" expanded="false" />
-            <element signature="e#2204#2205#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2806,18 +2674,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/PurchaseAdapter.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+        <state relative-caret-position="252">
+          <caret line="12" column="59" lean-forward="false" selection-start-line="12" selection-start-column="59" selection-end-line="12" selection-end-column="59" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="15" column="28" lean-forward="false" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
+          <folding>
+            <element signature="e#588#606#0" expanded="false" />
+            <element signature="e#878#908#0" expanded="false" />
+            <element signature="e#1320#1356#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/DropdownViewAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/values/styles.xml">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/PurchaseAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+        <state relative-caret-position="272">
+          <caret line="112" column="25" lean-forward="false" selection-start-line="112" selection-start-column="15" selection-end-line="112" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/Purchase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="14" column="18" lean-forward="false" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="18" />
           <folding />
         </state>
       </provider>
@@ -2830,37 +2731,132 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
+    <entry file="file://$PROJECT_DIR$/src/main/res/drawable/ic_close.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="39" column="18" lean-forward="false" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
+        <state relative-caret-position="189">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/App.java">
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/content_set_project.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="12" column="59" lean-forward="false" selection-start-line="12" selection-start-column="59" selection-end-line="12" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="231">
+          <caret line="11" column="41" lean-forward="false" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="41" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="15" column="28" lean-forward="false" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
-          <folding>
-            <element signature="e#588#606#0" expanded="true" />
-            <element signature="e#878#908#0" expanded="true" />
-            <element signature="e#1323#1359#0" expanded="true" />
-          </folding>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_set_project.xml">
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="742">
+          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
-      <provider editor-type-id="android-manifest">
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="551">
+          <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/drawable-hdpi/ic_action_account_circle_40.png">
+      <provider selected="true" editor-type-id="images">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/menu/menu_main.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="26" column="37" lean-forward="false" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/full_screen_dialog.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="98" column="37" lean-forward="false" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/BaseActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="28" column="4" lean-forward="false" selection-start-line="28" selection-start-column="4" selection-end-line="30" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/ProjectAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-29">
+          <caret line="54" column="83" lean-forward="false" selection-start-line="54" selection-start-column="76" selection-end-line="54" selection-end-column="83" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/values/styles.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="22" column="12" lean-forward="false" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/layout/setproject.xml">
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="651">
+          <caret line="31" column="43" lean-forward="false" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/Project.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="966">
+          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding>
+            <element signature="e#231#232#0" expanded="false" />
+            <element signature="e#257#258#0" expanded="false" />
+            <element signature="e#295#296#0" expanded="false" />
+            <element signature="e#325#326#0" expanded="false" />
+            <element signature="e#593#594#0" expanded="false" />
+            <element signature="e#620#621#0" expanded="false" />
+            <element signature="e#660#661#0" expanded="false" />
+            <element signature="e#692#693#0" expanded="false" />
+            <element signature="e#722#723#0" expanded="false" />
+            <element signature="e#751#752#0" expanded="false" />
+            <element signature="e#792#793#0" expanded="false" />
+            <element signature="e#828#829#0" expanded="false" />
+            <element signature="e#866#867#0" expanded="false" />
+            <element signature="e#900#901#0" expanded="false" />
+            <element signature="e#954#955#0" expanded="false" />
+            <element signature="e#1000#1001#0" expanded="false" />
+          </folding>
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_main.xml">
@@ -2868,20 +2864,33 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="38" column="38" lean-forward="false" selection-start-line="38" selection-start-column="25" selection-end-line="38" selection-end-column="38" />
+        <state relative-caret-position="210">
+          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="169" column="54" lean-forward="false" selection-start-line="169" selection-start-column="54" selection-end-line="169" selection-end-column="54" />
-          <folding>
-            <element signature="e#6366#6870#0" expanded="true" />
-            <element signature="e#6869#6870#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="42">
+          <caret line="638" column="0" lean-forward="false" selection-start-line="638" selection-start-column="0" selection-end-line="652" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/ProjectCreateDialogFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-536">
+          <caret line="40" column="9" lean-forward="false" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/budgetadviser/android/budgetadvisor/ProjectActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="190" column="7" lean-forward="true" selection-start-line="190" selection-start-column="7" selection-end-line="190" selection-end-column="7" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -5,13 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Looper;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
@@ -54,7 +52,6 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -122,18 +119,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         toolbar.setTitle("Budget Adviser");
         setSupportActionBar(toolbar);
 
-        projectTVtitle = findViewById(R.id.project_title);
         projectTVoutput = findViewById(R.id.project_title_name);
-        budgetTVtitle = findViewById(R.id.budget_title);
-        budgetTVoutput = findViewById(R.id.budget_title_name);
 
-        Typeface myFont = Typeface.createFromAsset(getAssets(),"fonts/Abel-Regular.ttf");
-        projectTVtitle.setTypeface(myFont);
-        projectTVoutput.setTypeface(myFont);
-        budgetTVtitle.setTypeface(myFont);
-        budgetTVoutput.setTypeface(myFont);
-        TextInputLayout textInputLayout= (TextInputLayout) findViewById(R.id.textInputLayoutId);
-        textInputLayout.setTypeface(myFont);
 
 
         myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
@@ -159,9 +146,11 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                     DropdownListItem item = mDropdownViewAdapter.setSelectedItem(position);
                     product = item.getText();
                     mDropdownMenu.setCurrentTitle(item.isEmptyItem() ? "Select Product" : item.getText());
+
                     mDropdownMenu.dismissCurrentPopupWindow();
                 }
             });
@@ -380,7 +369,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                 Log.e("Budget", "stats error", e);
             }
         }
-        else if(item.getItemId() == R.id.menu_setBudget){
+        /*else if(item.getItemId() == R.id.menu_setBudget){
             try{
                // Intent intent = new Intent(this, SettingsActivity.class);
                 //startActivity(intent);
@@ -432,10 +421,10 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                 Toast.makeText(getApplicationContext(),"Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e("Budget", "stats error", e);
             }
-        }
+        }*/
         else if(item.getItemId() == R.id.menu_setProject){
             try{
-                Intent intent = new Intent(this, SetProjectActivity.class);
+                Intent intent = new Intent(this, ProjectActivity.class);
                 startActivity(intent);
             }catch (Exception e){
                 Toast.makeText(getApplicationContext(),"Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
@@ -647,5 +636,19 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                 },
                 Looper.myLooper());
     }
-
+    @Override
+    public void onResume(){
+        super.onResume();
+/*        myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
+        Integer savedBudget = myDBfile.getInt("Budget", -1);
+        projectName = myDBfile.getString("projectName", "Default Project");
+        projectTVoutput.setText(projectName);
+        budget= savedBudget == -1 ? 2000 : savedBudget;
+        currentSpendings=0;
+        circular_progress = (ProgressBar)findViewById(R.id.circular_progress);
+        final TextView budget_tv = (TextView) findViewById(R.id.budget_title_name);
+        if (remainedBudget==null)
+            remainedBudget=0;
+        budget_tv.setText(remainedBudget.toString());*/
+    }
 }
