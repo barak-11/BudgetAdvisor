@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -61,6 +62,7 @@ import java.util.UUID;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.util.Log.d;
+import static android.widget.LinearLayout.HORIZONTAL;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 
@@ -251,6 +253,9 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                     llm.setOrientation(LinearLayoutManager.VERTICAL);
                     llm.setReverseLayout(true); // in order to display the database records ordered by newest to oldest
                     llm.setStackFromEnd(true); // in order to display the database records ordered by newest to oldest
+
+                    DividerItemDecoration itemDecor = new DividerItemDecoration(getApplicationContext(),llm.getOrientation()); //Adding line seprator
+                    rvContacts.addItemDecoration(itemDecor);
                     rvContacts.setLayoutManager(llm);
                     rvContacts.setAdapter(pAdapter);
                     // Set layout manager to position the items

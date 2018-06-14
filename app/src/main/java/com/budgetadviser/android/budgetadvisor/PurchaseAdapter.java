@@ -24,7 +24,7 @@ public class PurchaseAdapter extends
     // ... view holder defined above...
 
     // Store a member variable for the contacts
-    private List<Purchase> mPurchases;
+    public List<Purchase> mPurchases;
     public Context context;
     OnItemClickListener mItemClickListener;
     private EditText input_price;
