@@ -50,16 +50,17 @@ public class ProjectActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_project);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Choose or create new project");
+        toolbar.setTitle("Project Settings");
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //adds the back arrow to the toolbar
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 //createProject();
                 ProjectCreateDialogFragment newFragment = new ProjectCreateDialogFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -155,13 +156,7 @@ public class ProjectActivity extends BaseActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference  = mFirebaseDatabase.getReference();
     }
-    private void createProject() {
 
-
-        Project project = new Project(newProjectName,newProjectBudget, Calendar.getInstance().getTime().toString(),UUID.randomUUID().toString());
-        mDatabaseReference.child("project").child(getUid()).child(project.getUid()).setValue(project);
-        //clearEditText();
-    }
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int position = -1;
@@ -192,7 +187,7 @@ public class ProjectActivity extends BaseActivity {
      *
      * this method overrides the back button on the mobile device, when a user
      * is on the fragment view and taps 'back' this method will call ProjectActivity so the float button will reappear
-     */
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
@@ -205,5 +200,5 @@ public class ProjectActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
+*/
 }

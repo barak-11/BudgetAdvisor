@@ -1,4 +1,7 @@
 package com.budgetadviser.android.budgetadvisor;
+/**
+ * This class is called before onCreate an overrides the standard font
+ */
 
 import android.app.Application;
 

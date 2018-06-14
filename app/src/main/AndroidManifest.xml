@@ -34,6 +34,7 @@
         <activity
             android:name=".ProjectActivity"
             android:label="@string/title_activity_set_project"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
 
         </activity>

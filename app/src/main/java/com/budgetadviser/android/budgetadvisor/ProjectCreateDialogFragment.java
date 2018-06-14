@@ -38,7 +38,7 @@ public class ProjectCreateDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.full_screen_dialog, container, false);
         final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-         fab.setVisibility(View.INVISIBLE);
+         //fab.setVisibility(View.INVISIBLE);
          final EditText projName = rootView.findViewById(R.id.project_name_set);
          final EditText projBudget = rootView.findViewById(R.id.project_budget_set);
         try {
@@ -100,4 +100,5 @@ public class ProjectCreateDialogFragment extends DialogFragment {
     public String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
+
 }
