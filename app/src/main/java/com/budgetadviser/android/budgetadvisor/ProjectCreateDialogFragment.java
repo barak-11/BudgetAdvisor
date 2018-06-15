@@ -13,8 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +31,7 @@ import java.util.UUID;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ProjectCreateDialogFragment extends DialogFragment {
+public class ProjectCreateDialogFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
@@ -38,9 +41,18 @@ public class ProjectCreateDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.full_screen_dialog, container, false);
         final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-         //fab.setVisibility(View.INVISIBLE);
          final EditText projName = rootView.findViewById(R.id.project_name_set);
          final EditText projBudget = rootView.findViewById(R.id.project_budget_set);
+
+        final Spinner spinner = (Spinner) rootView.findViewById(R.id.currency_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(rootView.getContext(),R.array.currency_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setOnItemSelectedListener(this);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
         try {
             initFirebase();
         }catch (Exception e){
@@ -59,7 +71,12 @@ public class ProjectCreateDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 String projectName=projName.getText().toString();
                 int budgetInt = Integer.valueOf(projBudget.getText().toString());
-                Project proj = new Project(projectName,budgetInt, Calendar.getInstance().getTime().toString(), UUID.randomUUID().toString());
+                String currency;
+                if (spinner.getSelectedItem().toString()==null)
+                    currency = "$";
+                else
+                    currency = spinner.getSelectedItem().toString();
+                Project proj = new Project(projectName,budgetInt, Calendar.getInstance().getTime().toString(), UUID.randomUUID().toString(),currency);
                 mDatabaseReference.child("project").child(getUid()).child(proj.getUid()).setValue(proj);
 
                 InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -70,6 +87,7 @@ public class ProjectCreateDialogFragment extends DialogFragment {
                     myEditor = myDBfile.edit();
                     myEditor.putInt("Budget", budgetInt);
                     myEditor.putString("projectName", projectName);
+                    myEditor.putString("currency", currency);
                     myEditor.apply();
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
@@ -80,6 +98,9 @@ public class ProjectCreateDialogFragment extends DialogFragment {
 
             }
         });
+
+
+
         return rootView;
 
     }
@@ -101,4 +122,13 @@ public class ProjectCreateDialogFragment extends DialogFragment {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        //parent.getItemAtPosition(pos)
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }

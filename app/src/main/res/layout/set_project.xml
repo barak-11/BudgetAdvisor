@@ -43,10 +43,26 @@
                     android:textColor="#000"
                     android:textSize="18sp" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingStart="16dp">
+
                 <TextView
                     android:id="@+id/project_budget"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="1000"
+                    android:textColor="#555" />
+
+                <TextView
+                    android:id="@+id/project_currency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$"
                     android:textColor="#555" />
             </LinearLayout>
 

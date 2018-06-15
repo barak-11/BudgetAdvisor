@@ -54,7 +54,6 @@ public class Purchase {
         Date date = new Date();
         try {
             date = format.parse(dateTime);
-            System.out.println(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

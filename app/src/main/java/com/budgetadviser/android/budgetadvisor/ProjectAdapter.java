@@ -46,6 +46,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
         // for any view that will be set as you render a row
         TextView project_nameTextView;
         TextView project_budgetTextView;
+        TextView project_currencyTextView;
         Button setButton;
         Button editButton;
         ImageView cardImageView;
@@ -62,6 +63,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
 
             project_nameTextView = (TextView) itemView.findViewById(R.id.project_name);
             project_budgetTextView = (TextView) itemView.findViewById(R.id.project_budget);
+            project_currencyTextView= itemView.findViewById(R.id.project_currency);
             setButton = itemView.findViewById(R.id.setButton);
             editButton = itemView.findViewById(R.id.editButton);
 
@@ -102,6 +104,8 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
         textView.setText(currProject.getName());
         TextView textViewBudget = viewHolder.project_budgetTextView;
         textViewBudget.setText(String.valueOf(currProject.getBudget()));
+        TextView textViewCurrency = viewHolder.project_currencyTextView;
+        textViewCurrency.setText(currProject.getCurrency());
         final ViewHolder finalViewHolder=viewHolder;
         finalViewHolder.setButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +114,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ViewHold
                 myEditor = myDBfile.edit();
                 myEditor.putInt("Budget", currProject.getBudget());
                 myEditor.putString("projectName", currProject.getName());
+                myEditor.putString("currency", currProject.getCurrency());
                 myEditor.apply();
                 Snackbar.make(view, "Success", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }

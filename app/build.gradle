@@ -45,7 +45,7 @@ dependencies {
 
 
     implementation 'android.arch.core:runtime:1.1.1'
-
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
 }
 apply plugin: 'com.google.gms.google-services'

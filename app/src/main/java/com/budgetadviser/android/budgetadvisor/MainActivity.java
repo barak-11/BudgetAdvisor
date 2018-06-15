@@ -98,6 +98,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
     private Integer currentSpendings;
     private Integer remainedBudget;
     private String projectName;
+    private String currency;
 
     RecyclerView rvContacts;
     SharedPreferences myDBfile; // create a file or return a reference to an exist file
@@ -128,6 +129,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
         Integer savedBudget = myDBfile.getInt("Budget", -1);
         projectName = myDBfile.getString("projectName", "Default Project");
+        currency = myDBfile.getString("currency", "$");
 
 
 
@@ -229,7 +231,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                     final TextView budget_tv = (TextView) findViewById(R.id.budget_title_name);
                     remainedBudget = budget - currentSpendings;
                     currentSpendings=0;
-                    budget_tv.setText(remainedBudget.toString());
+                    budget_tv.setText(remainedBudget.toString()+currency);
 
                     rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
                     PurchaseAdapter pAdapter = new PurchaseAdapter(list_purchases);
@@ -254,7 +256,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                     llm.setReverseLayout(true); // in order to display the database records ordered by newest to oldest
                     llm.setStackFromEnd(true); // in order to display the database records ordered by newest to oldest
 
-                    DividerItemDecoration itemDecor = new DividerItemDecoration(getApplicationContext(),llm.getOrientation()); //Adding line seprator
+                    DividerItemDecoration itemDecor = new DividerItemDecoration(getApplicationContext(),llm.getOrientation()); //Adding line separator
                     rvContacts.addItemDecoration(itemDecor);
                     rvContacts.setLayoutManager(llm);
                     rvContacts.setAdapter(pAdapter);

@@ -32,9 +32,12 @@ import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class StatsActivity extends BaseActivity {
@@ -112,7 +115,7 @@ public class StatsActivity extends BaseActivity {
                     Calendar calendar = Calendar.getInstance();
                     String dayOfTheWeek,day,monthString,monthNumber,year;
                     String mapKey;
-
+                    List<Date> myList = new ArrayList<>();
                     for (Purchase pur : list_purchases){
                         dayOfTheWeek = (String) DateFormat.format("EEEE", pur.getRegularDate()); // Thursday
                         day          = (String) DateFormat.format("dd",   pur.getRegularDate()); // 20
@@ -120,13 +123,18 @@ public class StatsActivity extends BaseActivity {
                         monthNumber  = (String) DateFormat.format("MM",   pur.getRegularDate()); // 06
                         year         = (String) DateFormat.format("yyyy", pur.getRegularDate()); // 2013
 
-                        mapKey = day+"/"+monthString+"/"+year;
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(pur.getRegularDate());
+
+
+                        mapKey = cal.getTime().toString();
 
                         if (!datesWithPurchasesMap.containsKey(mapKey)){
                             countPurchases=1;
                             datesWithPurchasesCounterMap.put(mapKey,countPurchases);
                             datesWithPurchasesMap.put(mapKey,new ArrayList<Purchase>());
                             datesWithPurchasesMap.get(mapKey).add(pur);
+                            myList.add(pur.getRegularDate());
                         }
                         else {
                             currentPurchases=0;
@@ -136,20 +144,36 @@ public class StatsActivity extends BaseActivity {
 
                             datesWithPurchasesMap.get(mapKey).add(pur);
                         }
+
                     }
+                    Collections.sort(myList, new Comparator<Date>(){
+
+                        @Override
+                        public int compare(Date o1, Date o2) {
+                            return o1.compareTo(o2);
+                        }
+                    });
                     System.out.println("datesWithPurchasesCounterMap values are:"+datesWithPurchasesCounterMap.values());
                     System.out.println("datesWithPurchasesCounterMap keys are:"+datesWithPurchasesCounterMap.keySet());
                     LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-                    //DataPoint datapoints [] = new DataPoint[];
 
+                    series.resetData(new DataPoint[] {});
                     for (String d : datesWithPurchasesCounterMap.keySet()){
-                        series.resetData(new DataPoint[] {});
-                        DataPoint point = new DataPoint(getRegularDate(d), datesWithPurchasesCounterMap.get(d));
+
+                        //DataPoint point = new DataPoint(getRegularDate(d), datesWithPurchasesCounterMap.get(d));
                         System.out.println("getRegularDate(d): "+getRegularDate(d));
-                        series.appendData(point, true,datesWithPurchasesCounterMap.get(d));
+                        series.appendData(new DataPoint(getRegularDate(d), datesWithPurchasesCounterMap.get(d)), true,256);
                     }
-                    Date d1 = calendar.getTime();
-                    System.out.println("d1 calendar: "+d1);
+                    Calendar calMin = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/EEE/yyyy", Locale.ENGLISH);
+                    calMin.setTime(myList.get(0));
+                    Date dT1 = calMin.getTime();
+                    Calendar calMax = Calendar.getInstance();
+                    calMax.setTime(myList.get(myList.size()-1));
+                    Date dT2 = calMax.getTime();
+                   /* Date d1 = calendar.getTime();
+                    System.out.println("d1 calendar: "+d1);*/
+                    //System.out.println("series:"+series);
 
 
 
@@ -157,12 +181,13 @@ public class StatsActivity extends BaseActivity {
 
 // set date label formatter
                     graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(StatsActivity.this));
-                    //graph.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
+                    graph.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
 
 // set manual x bounds to have nice steps
-                    //graph.getViewport().setMinX(d1.getTime());
-                    //graph.getViewport().setMaxX(d3.getTime());
-                    //graph.getViewport().setXAxisBoundsManual(true);
+
+                    graph.getViewport().setMinX(dT1.getTime());
+                    graph.getViewport().setMaxX(dT2.getTime());
+                    graph.getViewport().setXAxisBoundsManual(true);
 
 // as we use dates as labels, the human rounding to nice readable numbers
 // is not necessary
@@ -187,12 +212,25 @@ public class StatsActivity extends BaseActivity {
             }
         });
     }
+    public Calendar getCalendar(int day, int month, int year) {
+        Calendar date = Calendar.getInstance();
+        date.set(Calendar.YEAR, year);
+
+        // We will have to increment the month field by 1
+
+        date.set(Calendar.MONTH, month+1);
+
+        // As the month indexing starts with 0
+
+        date.set(Calendar.DAY_OF_MONTH, day);
+
+        return date;
+    }
     public Date getRegularDate(String dateTime) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MMM/yyyy");
         Date date = new Date();
         try {
             date = format.parse(dateTime);
-            System.out.println(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -118,9 +118,10 @@ public class ProjectActivity extends BaseActivity {
                         String uid_str = postSnapshot.child("uid").getValue().toString();
                         String createdDate_str = postSnapshot.child("createdDate").getValue().toString();
                         int budget_int = Integer.valueOf(postSnapshot.child("budget").getValue().toString());
+                        String currency_str = postSnapshot.child("currency").getValue().toString();
 
 
-                        Project project = new Project(name_str,budget_int , createdDate_str,uid_str );
+                        Project project = new Project(name_str,budget_int , createdDate_str,uid_str,currency_str );
                         projectNames.add(project);
 
                     }
@@ -170,6 +171,7 @@ public class ProjectActivity extends BaseActivity {
             myEditor = myDBfile.edit();
             myEditor.putString("projectName", projectNames.get(position).getName());
             myEditor.putInt("Budget", projectNames.get(position).getBudget());
+            myEditor.putString("Currency", projectNames.get(position).getCurrency());
             myEditor.apply();
 
             Intent intent = new Intent(this, MainActivity.class);

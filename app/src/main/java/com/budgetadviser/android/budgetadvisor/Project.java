@@ -8,6 +8,7 @@ public class Project {
     private int budget;
     private String createdDate;
     private String uid;
+    private String currency;
 
     public String getUid() {
         return uid;
@@ -17,16 +18,25 @@ public class Project {
         this.uid = uid;
     }
 
-    public Project(String name, int budget, String createdDate, String uid) {
+    public Project(String name, int budget, String createdDate, String uid, String currency) {
 
         this.name = name;
         this.budget = budget;
         this.createdDate = createdDate;
         this.uid = uid;
+        this.currency=currency;
     }
 
     public Project() {
 
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getName() {

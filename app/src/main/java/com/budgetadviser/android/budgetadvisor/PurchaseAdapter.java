@@ -1,6 +1,7 @@
 package com.budgetadviser.android.budgetadvisor;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +19,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class PurchaseAdapter extends
         RecyclerView.Adapter<PurchaseAdapter.ViewHolder> {
 
@@ -29,6 +32,9 @@ public class PurchaseAdapter extends
     OnItemClickListener mItemClickListener;
     private EditText input_price;
     private DropdownMenu mDropdownMenu;
+    SharedPreferences myDBfile; // create a file or return a reference to an exist file
+    SharedPreferences.Editor myEditor;
+    String currency;
     // Pass in the contact array into the constructor
     public PurchaseAdapter(List<Purchase> prchases) {
         mPurchases = prchases;
@@ -47,7 +53,8 @@ public class PurchaseAdapter extends
     public PurchaseAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)  {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-
+        myDBfile = context.getSharedPreferences("budgets", MODE_PRIVATE);
+        currency = myDBfile.getString("currency", "$");
         // Inflate the custom layout
         View purchaseView = inflater.inflate(R.layout.item_post, parent, false);
 
@@ -63,6 +70,7 @@ public class PurchaseAdapter extends
         // for any view that will be set as you render a row
         TextView nameTextView;
         TextView priceTextView;
+        TextView currencyTextView;
         TextView addressTextView;
         TextView dateTextView;
         ImageView imgView;
@@ -78,6 +86,7 @@ public class PurchaseAdapter extends
             priceTextView = (TextView) itemView.findViewById(R.id.purchase_price);
             addressTextView = (TextView) itemView.findViewById(R.id.purchase_address);
             dateTextView = (TextView) itemView.findViewById(R.id.purchase_date);
+            currencyTextView = itemView.findViewById(R.id.purchase_currency);
             imgView = itemView.findViewById(R.id.item_image);
             itemView.setOnClickListener(this);
         }
@@ -151,7 +160,8 @@ public class PurchaseAdapter extends
         textViewAddress.setText(purchase.getAddress().toString());
         TextView dateViewAddress = viewHolder.dateTextView;
         dateViewAddress.setText(purchase.getDate());
-
+        TextView textViewCurrency = viewHolder.currencyTextView;
+        textViewCurrency.setText(currency);
     }
 
     // Returns the total count of items in the list

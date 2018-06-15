@@ -3,15 +3,10 @@
 <resources>
     <string name="app_name">Budget Advisor</string>
 
-    <string-array name="planets_array">
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
+    <string-array name="currency_array">
+        <item>$</item>
+        <item>€</item>
+        <item>₪</item>
     </string-array>
     <!-- Font -->
     <string name="roboto_regular">sans-serif</string>
