@@ -8,21 +8,17 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".App">
-        <activity
-            android:name=".MainActivity">
-
-        </activity>
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity"></activity>
         <activity
             android:name=".StatsActivity"
             android:label="@string/title_activity_stats"
             android:theme="@style/AppTheme" />
-
         <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,12 +26,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ProjectActivity"
             android:label="@string/title_activity_set_project"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
+
+        </activity>
+        <activity
+            android:name=".StreetViewActivity"
+            android:label="@string/title_activity_street_view"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBEhgFLdT9_HuBbfWBMjDPIW3PivW1OBMM" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps">
 
         </activity>
     </application>

@@ -94,6 +94,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
     private String address="";
+    double latitude=0;
+    double longitude=0;
     private Integer budget;
     private Integer currentSpendings;
     private Integer remainedBudget;
@@ -188,16 +190,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         //startLocationUpdates();
 
     }
-    public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
+
 
 
 
@@ -221,8 +214,10 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                             String address_str = postSnapshot.child("address").getValue().toString();
                             String price_str = postSnapshot.child("price").getValue().toString();
                             String project_str = postSnapshot.child("projectName").getValue().toString();
+                            double longitude = Double.valueOf(postSnapshot.child("longitude").getValue().toString());
+                            double latitude = Double.valueOf(postSnapshot.child("latitude").getValue().toString());
 
-                            Purchase purchase = new Purchase(name_str, uid_str, Integer.valueOf(price_str), address_str,date_str,project_str);
+                            Purchase purchase = new Purchase(name_str, uid_str, Integer.valueOf(price_str), address_str,date_str,project_str,latitude,longitude);
                             list_purchases.add(purchase);
                             currentSpendings+=Integer.valueOf(postSnapshot.child("price").getValue().toString());
                         }
@@ -249,8 +244,33 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                            // DropdownListItem item = mDropdownViewAdapter.setSelectedItem(position);
                             mDropdownMenu.dismissCurrentPopupWindow();
                         }
+                        @Override
+                        public void onLongItemClick(View v, int position, String id) {
+                            registerForContextMenu(rvContacts);
+                        }
                     });
+                    pAdapter.SetOnLongItemClickListener(new PurchaseAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View v, int position, String id) {
 
+                        }
+
+                        @Override
+                        public void onLongItemClick(View v, int position, String id) {
+                            System.out.println("onItemLongClick" + id);
+
+                            Purchase pur = list_purchases.get(position);
+                            //selectedPlace =place;
+                             /*
+                            myDBfile = getSharedPreferences("file1", MODE_PRIVATE);
+                            myEditor = myDBfile.edit();
+                            myEditor.putString("latitude", place.getLatitude() );
+                            myEditor.putString("longitude", place.getLongitude() );
+                            myEditor.apply(); //"commit" saves the file
+                            */
+
+                        }
+                    });
                     LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
                     llm.setOrientation(LinearLayoutManager.VERTICAL);
                     llm.setReverseLayout(true); // in order to display the database records ordered by newest to oldest
@@ -288,10 +308,12 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("address").setValue(purchase.getAddress());
         mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("date").setValue(purchase.getDate());
         mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("projectName").setValue(purchase.getProjectName());
+        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("latitude").setValue(purchase.getLatitude());
+        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("longitude").setValue(purchase.getLongitude());
         clearEditText();
     }
 
-    private void createPurchase() {
+    private void createPurchase() throws IOException {
         //final TextView latlngNew = (TextView)findViewById(R.id.latLng);
         String sInput_Price="";
         if (product.matches(""))
@@ -300,10 +322,17 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
             sInput_Price="0";
         else
             sInput_Price=input_price.getText().toString();
+        try {
+            startLocationUpdates();
+        }catch (Exception e){
+            Log.e("createPurchase()", "create error", e);
+            Toast.makeText(getApplicationContext(),"Error:"+e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
         if (address.matches(""))
             address="";
 
-        Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address,Calendar.getInstance().getTime().toString(),projectName);
+        Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address,Calendar.getInstance().getTime().toString(),projectName,latitude,longitude);
         mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).setValue(purchase);
         clearEditText();
     }
@@ -315,7 +344,44 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
 
 
     }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int position = -1;
+        try {
+            position = ((PurchaseAdapter) rvContacts.getAdapter()).getPosition();
+        } catch (Exception e) {
+            return super.onContextItemSelected(item);
+        }
+        if(item.getTitle()=="Show in Street View"){
+            Intent myIntent;
+            myIntent = new Intent(this, StreetViewActivity.class);
+            Bundle b = new Bundle();
+            b.putDouble("latitude", latitude);
+            b.putDouble("longitude", longitude);
+            myIntent.putExtras(b);
+            //myIntent.putExtra("latitude",latitude);
+            //myIntent.putExtra("longitude",longitude);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(myIntent);
+            finish();
 
+
+        }
+        else if(item.getTitle()=="Show in Map"){
+            Intent myIntent;
+            myIntent = new Intent(this, MapsActivity.class);
+            Bundle b = new Bundle();
+            b.putDouble("latitude", latitude);
+            b.putDouble("longitude", longitude);
+            myIntent.putExtras(b);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(myIntent);
+            finish();
+        }else{
+            return false;
+        }
+        return super.onContextItemSelected(item);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main,menu);
@@ -342,7 +408,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
             try {
                 if ( !input_price.getText().toString().matches("")) {
 
-                    Purchase purchase = new Purchase( product,selectedPurchase.getUid(), Integer.valueOf(input_price.getText().toString()),address, selectedPurchase.getDate(),projectName);
+                    Purchase purchase = new Purchase( product,selectedPurchase.getUid(), Integer.valueOf(input_price.getText().toString()),address, selectedPurchase.getDate(),projectName,latitude,longitude);
                     updatePurchase(purchase);
                 }
                 else {
@@ -496,14 +562,12 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                         if (location != null) {
 
 
-
-                            Geocoder geocoder;
-                            List<Address> addresses;
-                            double latitude = location.getLatitude();
-                            double longitude = location.getLongitude();
-                            geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
-
                             try {
+                                Geocoder geocoder;
+                                List<Address> addresses;
+                                latitude = location.getLatitude();
+                                longitude = location.getLongitude();
+                                geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
                                 addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                                 address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                                 String city = addresses.get(0).getLocality();
@@ -550,7 +614,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
             list.add(new DropdownListItem(6, "Snacks"));
             list.add(new DropdownListItem(7, "Transportation"));
             list.add(new DropdownListItem(8, "Groceries"));
-            list.add(new DropdownListItem(9, "Cloths"));
+            list.add(new DropdownListItem(9, "Clothes"));
             list.add(new DropdownListItem(10, "Gifts"));
             list.add(new DropdownListItem(11, "Drinks"));
             list.add(new DropdownListItem(12, "Baby Stuff"));
@@ -592,23 +656,9 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
 
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
 
-        // New location has now been determined
-        /*
-        String msg = "Updated Location: " +
-                Double.toString(location.getLatitude()) + "," +
-                Double.toString(location.getLongitude());
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        final TextView latlngNew = (TextView)findViewById(R.id.latLng);
-        latlngNew.setText(location.getLatitude()+","+location.getLongitude());
-*/
-        // You can now create a LatLng Object for use with maps
-        //LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-    }
 
-    // This method checks for location updates
+    // Use this method to get current location
     protected void startLocationUpdates() {
 
         // Create the location request to start receiving updates
@@ -639,9 +689,54 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                     public void onLocationResult(LocationResult locationResult) {
                         // do work here
                         onLocationChanged(locationResult.getLastLocation());
+                        Location location=locationResult.getLastLocation();
+                        if (location != null) {
+
+
+                            try {
+                                Geocoder geocoder;
+                                List<Address> addresses;
+                                latitude = location.getLatitude();
+                                longitude = location.getLongitude();
+                                geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                                String city = addresses.get(0).getLocality();
+                                String state = addresses.get(0).getAdminArea();
+                                String country = addresses.get(0).getCountryName();
+                                String postalCode = addresses.get(0).getPostalCode();
+                                String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+
+
+                            }
+                            catch (Exception e){
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
+
+                        }
+                        else {
+
+                            Toast.makeText(getApplicationContext(),"location is null", Toast.LENGTH_LONG).show();
+                        }
                     }
                 },
                 Looper.myLooper());
+    }
+    @Override
+    public void onLocationChanged(Location location) {
+
+        // New location has now been determined
+        /*
+        String msg = "Updated Location: " +
+                Double.toString(location.getLatitude()) + "," +
+                Double.toString(location.getLongitude());
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        final TextView latlngNew = (TextView)findViewById(R.id.latLng);
+        latlngNew.setText(location.getLatitude()+","+location.getLongitude());
+*/
+        // You can now create a LatLng Object for use with maps
+        //LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
     }
     @Override
     public void onResume(){
@@ -657,5 +752,15 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         if (remainedBudget==null)
             remainedBudget=0;
         budget_tv.setText(remainedBudget.toString());*/
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

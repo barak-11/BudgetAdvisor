@@ -14,17 +14,37 @@ public class Purchase {
     private String address;
     private String dateTime;
     private String projectName;
+    private double latitude;
+    private double longitude;
 
-    public Purchase(String name, String uid, Integer price, String address, String datetime,String projectName) {
+    public Purchase(String name, String uid, Integer price, String address, String dateTime, String projectName, double latitude, double longitude) {
         this.name = name;
         this.uid = uid;
         this.price = price;
         this.address = address;
-        this.dateTime = datetime;
-        this.projectName=projectName;
-        //Calendar.getInstance().getTime()
+        this.dateTime = dateTime;
+        this.projectName = projectName;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
+
     public Purchase() {
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public String getDateTime() {
@@ -49,6 +69,7 @@ public class Purchase {
     public String getDate() {
         return dateTime;
     }
+
     public Date getRegularDate() {
         SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
         Date date = new Date();

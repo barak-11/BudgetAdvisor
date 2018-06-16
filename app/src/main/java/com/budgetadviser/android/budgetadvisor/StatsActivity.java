@@ -94,7 +94,7 @@ public class StatsActivity extends BaseActivity {
         circular_progress.setVisibility(View.VISIBLE);
 
 
-        mDatabaseReference.child("purchase").child(getUid()).addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("purchase").child(getUid()).orderByChild("regularDate/time").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -104,8 +104,10 @@ public class StatsActivity extends BaseActivity {
 
 
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Purchase purchase = new Purchase(postSnapshot.child("name").getValue().toString(), postSnapshot.child("uid").getValue().toString(), Integer.valueOf(postSnapshot.child("price").getValue().toString()), postSnapshot.child("address").getValue().toString(),postSnapshot.child("date").getValue().toString(),projectName);
-                        list_purchases.add(purchase);
+                        if (postSnapshot.child("projectName").getValue().toString().matches(projectName)) {
+                            Purchase purchase = new Purchase(postSnapshot.child("name").getValue().toString(), postSnapshot.child("uid").getValue().toString(), Integer.valueOf(postSnapshot.child("price").getValue().toString()), postSnapshot.child("address").getValue().toString(), postSnapshot.child("date").getValue().toString(), projectName,Double.valueOf(postSnapshot.child("latitude").getValue().toString()),Double.valueOf(postSnapshot.child("longitude").getValue().toString()));
+                            list_purchases.add(purchase);
+                        }
                     }
 
                     Map<String,List<Purchase>> datesWithPurchasesMap = new HashMap<>();
@@ -115,26 +117,26 @@ public class StatsActivity extends BaseActivity {
                     Calendar calendar = Calendar.getInstance();
                     String dayOfTheWeek,day,monthString,monthNumber,year;
                     String mapKey;
-                    List<Date> myList = new ArrayList<>();
+                    List<String> myStringList = new ArrayList<>();
                     for (Purchase pur : list_purchases){
-                        dayOfTheWeek = (String) DateFormat.format("EEEE", pur.getRegularDate()); // Thursday
-                        day          = (String) DateFormat.format("dd",   pur.getRegularDate()); // 20
-                        monthString  = (String) DateFormat.format("MMM",  pur.getRegularDate()); // Jun
-                        monthNumber  = (String) DateFormat.format("MM",   pur.getRegularDate()); // 06
-                        year         = (String) DateFormat.format("yyyy", pur.getRegularDate()); // 2013
-
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(pur.getRegularDate());
+//                        dayOfTheWeek = (String) DateFormat.format("EEEE", pur.getRegularDate()); // Thursday
+//                        day          = (String) DateFormat.format("dd",   pur.getRegularDate()); // 20
+//                        monthString  = (String) DateFormat.format("MMM",  pur.getRegularDate()); // Jun
+//                        monthNumber  = (String) DateFormat.format("MM",   pur.getRegularDate()); // 06
+//                        year         = (String) DateFormat.format("yyyy", pur.getRegularDate()); // 2013
 
 
-                        mapKey = cal.getTime().toString();
+
+
+
+                        mapKey = pur.getDate();
 
                         if (!datesWithPurchasesMap.containsKey(mapKey)){
                             countPurchases=1;
                             datesWithPurchasesCounterMap.put(mapKey,countPurchases);
                             datesWithPurchasesMap.put(mapKey,new ArrayList<Purchase>());
                             datesWithPurchasesMap.get(mapKey).add(pur);
-                            myList.add(pur.getRegularDate());
+                            myStringList.add(mapKey);
                         }
                         else {
                             currentPurchases=0;
@@ -146,10 +148,22 @@ public class StatsActivity extends BaseActivity {
                         }
 
                     }
-                    Collections.sort(myList, new Comparator<Date>(){
+                    System.out.println("date List.get(0) (myList): "+myStringList.get(0));/*
+                    List<Date> dateList = new ArrayList<>();
+                    Calendar calendardemo = Calendar.getInstance();
+                    Date d1 = calendardemo.getTime();
+                    dateList.add(d1);
+                    calendardemo.add(Calendar.DATE, 1);
+                    Date d2 = calendardemo.getTime();
+                    dateList.add(d2);
+                    calendardemo.add(Calendar.DATE, 1);
+                    Date d3 = calendardemo.getTime();
+                    dateList.add(d3);*/
+
+                    Collections.sort(myStringList, new Comparator<String>(){
 
                         @Override
-                        public int compare(Date o1, Date o2) {
+                        public int compare(String o1, String o2) {
                             return o1.compareTo(o2);
                         }
                     });
@@ -157,22 +171,32 @@ public class StatsActivity extends BaseActivity {
                     System.out.println("datesWithPurchasesCounterMap keys are:"+datesWithPurchasesCounterMap.keySet());
                     LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
 
-                    series.resetData(new DataPoint[] {});
-                    for (String d : datesWithPurchasesCounterMap.keySet()){
+                    SimpleDateFormat format = new SimpleDateFormat("MMddyyHHmmss");
+                    //Date date = format.parse("022310141505");
+                    for (String d : myStringList){
 
                         //DataPoint point = new DataPoint(getRegularDate(d), datesWithPurchasesCounterMap.get(d));
-                        System.out.println("getRegularDate(d): "+getRegularDate(d));
-                        series.appendData(new DataPoint(getRegularDate(d), datesWithPurchasesCounterMap.get(d)), true,256);
+                        System.out.println("before convertion: "+d);
+                        Date date = format.parse(d);
+                        System.out.println("date: "+date.toString());
+                        series.appendData(new DataPoint(date, datesWithPurchasesCounterMap.get(d)), true,256);
+
+
                     }
+
                     Calendar calMin = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/EEE/yyyy", Locale.ENGLISH);
-                    calMin.setTime(myList.get(0));
+                    SimpleDateFormat formatTimeStamp = new SimpleDateFormat("MMddyyHHmmss");
+
+                    calMin.setTime(formatTimeStamp.parse(myStringList.get(0)));
                     Date dT1 = calMin.getTime();
                     Calendar calMax = Calendar.getInstance();
-                    calMax.setTime(myList.get(myList.size()-1));
+                    calMax.setTime(formatTimeStamp.parse(myStringList.get(myStringList.size()-1)));
                     Date dT2 = calMax.getTime();
-                   /* Date d1 = calendar.getTime();
-                    System.out.println("d1 calendar: "+d1);*/
+                   /* Date d1 = calendar.getTime();*/
+                    System.out.println("dT1 calendar.getTime: "+dT1.getTime());
+                   // System.out.println("dT2 calendar: "+dT2.toString());
+                    System.out.println("d1 calendar.getTime: "+dT2.getTime());
                     //System.out.println("series:"+series);
 
 
@@ -181,7 +205,7 @@ public class StatsActivity extends BaseActivity {
 
 // set date label formatter
                     graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(StatsActivity.this));
-                    graph.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
+                    graph.getGridLabelRenderer().setNumHorizontalLabels(datesWithPurchasesCounterMap.size()); // only 4 because of the space
 
 // set manual x bounds to have nice steps
 
@@ -227,7 +251,7 @@ public class StatsActivity extends BaseActivity {
         return date;
     }
     public Date getRegularDate(String dateTime) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MMM/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd/EEE/yyyy");
         Date date = new Date();
         try {
             date = format.parse(dateTime);

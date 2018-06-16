@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class PurchaseAdapter extends
     public List<Purchase> mPurchases;
     public Context context;
     OnItemClickListener mItemClickListener;
+    OnItemClickListener mItemLongClickListener;
     private EditText input_price;
     private DropdownMenu mDropdownMenu;
     SharedPreferences myDBfile; // create a file or return a reference to an exist file
@@ -44,10 +46,14 @@ public class PurchaseAdapter extends
 
     public interface OnItemClickListener {
         public void onItemClick(View view, int position, String id);
+        public void onLongItemClick(View view, int position, String id);
     }
 
     public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mItemClickListener = mItemClickListener;
+    }
+    public void SetOnLongItemClickListener(final OnItemClickListener mItemLongClickListener) {
+        this.mItemLongClickListener = mItemLongClickListener;
     }
     @Override
     public PurchaseAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)  {
@@ -65,7 +71,7 @@ public class PurchaseAdapter extends
 
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener,View.OnCreateContextMenuListener{
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         TextView nameTextView;
@@ -82,12 +88,14 @@ public class PurchaseAdapter extends
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
+            itemView.setOnCreateContextMenuListener(this); //REGISTER ONCREATE MENU LISTENER
             nameTextView = (TextView) itemView.findViewById(R.id.purchase_name);
             priceTextView = (TextView) itemView.findViewById(R.id.purchase_price);
             addressTextView = (TextView) itemView.findViewById(R.id.purchase_address);
             dateTextView = (TextView) itemView.findViewById(R.id.purchase_date);
             currencyTextView = itemView.findViewById(R.id.purchase_currency);
             imgView = itemView.findViewById(R.id.item_image);
+            itemView.setOnLongClickListener(this);
             itemView.setOnClickListener(this);
         }
 
@@ -98,6 +106,18 @@ public class PurchaseAdapter extends
             mItemClickListener.onItemClick(v, getAdapterPosition(), "id"); //OnItemClickListener mItemClickListener;
         }
 
+        @Override
+        public boolean onLongClick(View v) {
+            mItemLongClickListener.onLongItemClick(v, getAdapterPosition(), "id");
+            return false;
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            contextMenu.setHeaderTitle("Select an Action");
+            contextMenu.add(0, view.getId(), 0, "Show in Street View");//groupId, itemId, order, title
+            contextMenu.add(0, view.getId(), 0, "Show in Map");
+        }
     }
 
     // Involves populating data into the item through holder
@@ -162,12 +182,28 @@ public class PurchaseAdapter extends
         dateViewAddress.setText(purchase.getDate());
         TextView textViewCurrency = viewHolder.currencyTextView;
         textViewCurrency.setText(currency);
+        final ViewHolder finalViewHolder=viewHolder;
+        finalViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                setPosition(finalViewHolder.getAdapterPosition());
+                return false;
+            }
+        });
     }
 
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
         return mPurchases.size();
+    }
+
+    private int position;
+    public int getPosition() {
+        return position;
+    }
+    public void setPosition(int position) {
+        this.position = position;
     }
 
 

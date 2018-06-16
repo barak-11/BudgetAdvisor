@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'uk.co.chrisjenx:calligraphy:2.2.0'
     implementation 'com.android.support:support-v4:27.1.1'
-
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation 'br.com.simplepass:loading-button-android:1.14.0'
 
 
