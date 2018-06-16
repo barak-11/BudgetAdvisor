@@ -17,7 +17,10 @@ import android.widget.Toast;
 import com.exblr.dropdownmenu.DropdownMenu;
 
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -179,7 +182,19 @@ public class PurchaseAdapter extends
         TextView textViewAddress = viewHolder.addressTextView;
         textViewAddress.setText(purchase.getAddress().toString());
         TextView dateViewAddress = viewHolder.dateTextView;
-        dateViewAddress.setText(purchase.getDate());
+        String mytime=purchase.getDate();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
+        Date myDate = null;
+        try {
+            myDate = dateFormat.parse(mytime);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MMM/yyyy - HH:mm");
+        String finalDate = timeFormat.format(myDate);
+        dateViewAddress.setText(finalDate);
+
         TextView textViewCurrency = viewHolder.currencyTextView;
         textViewCurrency.setText(currency);
         final ViewHolder finalViewHolder=viewHolder;
