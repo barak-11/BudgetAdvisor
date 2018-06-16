@@ -36,6 +36,7 @@
 
         <TextView
             android:id="@+id/purchase_currency"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="10dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="10dp"

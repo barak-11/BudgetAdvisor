@@ -53,8 +53,13 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.io.IOException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -101,6 +106,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
     private Integer remainedBudget;
     private String projectName;
     private String currency;
+    private String timestamp;
 
     RecyclerView rvContacts;
     SharedPreferences myDBfile; // create a file or return a reference to an exist file
@@ -216,8 +222,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                             String project_str = postSnapshot.child("projectName").getValue().toString();
                             double longitude = Double.valueOf(postSnapshot.child("longitude").getValue().toString());
                             double latitude = Double.valueOf(postSnapshot.child("latitude").getValue().toString());
-
-                            Purchase purchase = new Purchase(name_str, uid_str, Integer.valueOf(price_str), address_str,date_str,project_str,latitude,longitude);
+                            String timestamp_str = postSnapshot.child("timestamp").getValue().toString();
+                            Purchase purchase = new Purchase(name_str, uid_str, Integer.valueOf(price_str), address_str,date_str,project_str,latitude,longitude,timestamp_str);
                             list_purchases.add(purchase);
                             currentSpendings+=Integer.valueOf(postSnapshot.child("price").getValue().toString());
                         }
@@ -332,7 +338,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         if (address.matches(""))
             address="";
 
-        Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address,Calendar.getInstance().getTime().toString(),projectName,latitude,longitude);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Purchase purchase = new Purchase(product,UUID.randomUUID().toString(), Integer.valueOf(sInput_Price),address,Calendar.getInstance().getTime().toString(),projectName,latitude,longitude,String.valueOf(timestamp.getTime()));
         mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).setValue(purchase);
         clearEditText();
     }
@@ -408,7 +415,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
             try {
                 if ( !input_price.getText().toString().matches("")) {
 
-                    Purchase purchase = new Purchase( product,selectedPurchase.getUid(), Integer.valueOf(input_price.getText().toString()),address, selectedPurchase.getDate(),projectName,latitude,longitude);
+                    Purchase purchase = new Purchase( product,selectedPurchase.getUid(), Integer.valueOf(input_price.getText().toString()),address, selectedPurchase.getDate(),projectName,latitude,longitude,timestamp);
                     updatePurchase(purchase);
                 }
                 else {

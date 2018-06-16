@@ -8,8 +8,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
@@ -24,33 +26,36 @@ public class StreetViewActivity extends AppCompatActivity implements OnStreetVie
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_street_view);
+        try{
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_new);
+            toolbar.setTitle("Street View");
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); //adds the back arrow to the toolbar
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_new);
-        toolbar.setTitle("Street View");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //adds the back arrow to the toolbar
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+            Bundle b = getIntent().getExtras();
+            latitude = b.getDouble("latitude");
+            longitude = b.getDouble("longitude");
 
-        Bundle b = getIntent().getExtras();
-        latitude = b.getDouble("latitude");
-        longitude = b.getDouble("longitude");
+            StreetViewPanoramaFragment streetViewPanoramaFragment =(StreetViewPanoramaFragment) getFragmentManager().findFragmentById(R.id.streetviewpanorama);
+            streetViewPanoramaFragment.getStreetViewPanoramaAsync(this);
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), "StreetView error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("StreetView", "oStreetView error", e);
+        }
 
-        StreetViewPanoramaFragment streetViewPanoramaFragment =(StreetViewPanoramaFragment) getFragmentManager().findFragmentById(R.id.streetviewpanorama);
-        streetViewPanoramaFragment.getStreetViewPanoramaAsync(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
     public void onStreetViewPanoramaReady(StreetViewPanorama streetViewPanorama) {
-        streetViewPanorama.setPosition(new LatLng(latitude,longitude));
+        try{
+            streetViewPanorama.setPosition(new LatLng(latitude,longitude));
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), "StreetView error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("StreetView", "oStreetView error", e);
+        }
+
     }
 
     @Override
@@ -68,6 +73,9 @@ public class StreetViewActivity extends AppCompatActivity implements OnStreetVie
         }
     }
 
+    @Override
+    public void onBackPressed() {
 
+    }
 
 }

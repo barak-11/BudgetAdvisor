@@ -13,8 +13,11 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled true
+        }
+        debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
         }
     }
 }
@@ -30,7 +33,7 @@ dependencies {
 
     implementation 'com.exblr:dropdown-menu:1.0.2'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
-    implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'

@@ -16,17 +16,30 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.utils.EntryXComparator;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
+
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
@@ -45,7 +58,6 @@ public class StatsActivity extends BaseActivity {
     private DatabaseReference mDatabaseReference;
     private List<Purchase> list_purchases = new ArrayList<>();
     private ProgressBar circular_progress;
-    private GraphView graph;
     SharedPreferences myDBfile; // create a file or return a reference to an exist file
     SharedPreferences.Editor myEditor;
     private String projectName;
@@ -67,7 +79,6 @@ public class StatsActivity extends BaseActivity {
         });
 
         circular_progress = (ProgressBar)findViewById(R.id.circular_progress);
-        graph = (GraphView) findViewById(R.id.graph);
         myDBfile = getSharedPreferences("budgets", MODE_PRIVATE);
         Integer savedBudget = myDBfile.getInt("Budget", -1);
         projectName = myDBfile.getString("projectName", "Default Project");
@@ -90,11 +101,10 @@ public class StatsActivity extends BaseActivity {
     }
     private void addEventFirebaseListener() {
         //Progressing
-        graph.setVisibility(View.INVISIBLE);
         circular_progress.setVisibility(View.VISIBLE);
 
 
-        mDatabaseReference.child("purchase").child(getUid()).orderByChild("regularDate/time").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("purchase").child(getUid()).orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -105,7 +115,7 @@ public class StatsActivity extends BaseActivity {
 
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         if (postSnapshot.child("projectName").getValue().toString().matches(projectName)) {
-                            Purchase purchase = new Purchase(postSnapshot.child("name").getValue().toString(), postSnapshot.child("uid").getValue().toString(), Integer.valueOf(postSnapshot.child("price").getValue().toString()), postSnapshot.child("address").getValue().toString(), postSnapshot.child("date").getValue().toString(), projectName,Double.valueOf(postSnapshot.child("latitude").getValue().toString()),Double.valueOf(postSnapshot.child("longitude").getValue().toString()));
+                            Purchase purchase = new Purchase(postSnapshot.child("name").getValue().toString(), postSnapshot.child("uid").getValue().toString(), Integer.valueOf(postSnapshot.child("price").getValue().toString()), postSnapshot.child("address").getValue().toString(), postSnapshot.child("date").getValue().toString(), projectName,Double.valueOf(postSnapshot.child("latitude").getValue().toString()),Double.valueOf(postSnapshot.child("longitude").getValue().toString()), postSnapshot.child("timestamp").getValue().toString());
                             list_purchases.add(purchase);
                         }
                     }
@@ -120,16 +130,17 @@ public class StatsActivity extends BaseActivity {
                     List<String> myStringList = new ArrayList<>();
                     for (Purchase pur : list_purchases){
 //                        dayOfTheWeek = (String) DateFormat.format("EEEE", pur.getRegularDate()); // Thursday
-//                        day          = (String) DateFormat.format("dd",   pur.getRegularDate()); // 20
+                        day          = (String) DateFormat.format("dd",   pur.getRegularDate()); // 20
 //                        monthString  = (String) DateFormat.format("MMM",  pur.getRegularDate()); // Jun
-//                        monthNumber  = (String) DateFormat.format("MM",   pur.getRegularDate()); // 06
-//                        year         = (String) DateFormat.format("yyyy", pur.getRegularDate()); // 2013
+                        monthNumber  = (String) DateFormat.format("MM",   pur.getRegularDate()); // 06
+                        year         = (String) DateFormat.format("yyyy", pur.getRegularDate()); // 2013
 
 
 
 
 
-                        mapKey = pur.getDate();
+                        mapKey = day+"/"+monthNumber+"/"+year;
+                        System.out.println("mapkey:"+mapKey);
 
                         if (!datesWithPurchasesMap.containsKey(mapKey)){
                             countPurchases=1;
@@ -148,79 +159,53 @@ public class StatsActivity extends BaseActivity {
                         }
 
                     }
-                    System.out.println("date List.get(0) (myList): "+myStringList.get(0));/*
-                    List<Date> dateList = new ArrayList<>();
-                    Calendar calendardemo = Calendar.getInstance();
-                    Date d1 = calendardemo.getTime();
-                    dateList.add(d1);
-                    calendardemo.add(Calendar.DATE, 1);
-                    Date d2 = calendardemo.getTime();
-                    dateList.add(d2);
-                    calendardemo.add(Calendar.DATE, 1);
-                    Date d3 = calendardemo.getTime();
-                    dateList.add(d3);*/
-
-                    Collections.sort(myStringList, new Comparator<String>(){
-
-                        @Override
-                        public int compare(String o1, String o2) {
-                            return o1.compareTo(o2);
-                        }
-                    });
-                    System.out.println("datesWithPurchasesCounterMap values are:"+datesWithPurchasesCounterMap.values());
-                    System.out.println("datesWithPurchasesCounterMap keys are:"+datesWithPurchasesCounterMap.keySet());
-                    LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-
-                    SimpleDateFormat format = new SimpleDateFormat("MMddyyHHmmss");
-                    //Date date = format.parse("022310141505");
-                    for (String d : myStringList){
-
-                        //DataPoint point = new DataPoint(getRegularDate(d), datesWithPurchasesCounterMap.get(d));
-                        System.out.println("before convertion: "+d);
-                        Date date = format.parse(d);
-                        System.out.println("date: "+date.toString());
-                        series.appendData(new DataPoint(date, datesWithPurchasesCounterMap.get(d)), true,256);
 
 
+                    BarChart chart = (BarChart) findViewById(R.id.chart);
+                    List<BarEntry> entries = new ArrayList<>();
+                    List<String> labels = new ArrayList<>();
+                    Collections.sort(myStringList);
+                    int counter = 0;
+                    for (String str : myStringList){
+                        labels.add(str);
+                        entries.add(new BarEntry( counter,datesWithPurchasesCounterMap.get(str)));
+                        counter++;
                     }
 
-                    Calendar calMin = Calendar.getInstance();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/EEE/yyyy", Locale.ENGLISH);
-                    SimpleDateFormat formatTimeStamp = new SimpleDateFormat("MMddyyHHmmss");
+                    XAxis bottomAxis = chart.getXAxis();
 
-                    calMin.setTime(formatTimeStamp.parse(myStringList.get(0)));
-                    Date dT1 = calMin.getTime();
-                    Calendar calMax = Calendar.getInstance();
-                    calMax.setTime(formatTimeStamp.parse(myStringList.get(myStringList.size()-1)));
-                    Date dT2 = calMax.getTime();
-                   /* Date d1 = calendar.getTime();*/
-                    System.out.println("dT1 calendar.getTime: "+dT1.getTime());
-                   // System.out.println("dT2 calendar: "+dT2.toString());
-                    System.out.println("d1 calendar.getTime: "+dT2.getTime());
-                    //System.out.println("series:"+series);
+                    bottomAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+                    bottomAxis.setLabelCount(entries.size());
+                    bottomAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                    bottomAxis.setDrawLabels(true);
+                    bottomAxis.setDrawGridLines(false);
+                    bottomAxis.setDrawAxisLine(true);
 
 
+                    YAxis rightYAxis = chart.getAxisRight();
 
-                    graph.addSeries(series);
+                    rightYAxis.setEnabled(false);
+                    BarDataSet set = new BarDataSet(entries, "Amount of Purchases");
+                    BarData data = new BarData(set);
 
-// set date label formatter
-                    graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(StatsActivity.this));
-                    graph.getGridLabelRenderer().setNumHorizontalLabels(datesWithPurchasesCounterMap.size()); // only 4 because of the space
+                    data.setBarWidth(0.5f); // set custom bar width
+                    chart.setData(data);
+                    chart.setDescription(null);
+                    chart.setPinchZoom(false);
+                    chart.setScaleEnabled(false);
+                    chart.setDrawBarShadow(false);
+                    chart.setDrawGridBackground(false);
+                    chart.animateY(2000);
+                    chart.getData().setValueTextSize(10);
+                    chart.getLegend().setEnabled(true);
 
-// set manual x bounds to have nice steps
+                    chart.invalidate(); // refresh
 
-                    graph.getViewport().setMinX(dT1.getTime());
-                    graph.getViewport().setMaxX(dT2.getTime());
-                    graph.getViewport().setXAxisBoundsManual(true);
-
-// as we use dates as labels, the human rounding to nice readable numbers
-// is not necessary
-                    graph.getGridLabelRenderer().setHumanRounding(false);
-
-
+                    System.out.println("datesWithPurchasesCounterMap values are:"+datesWithPurchasesCounterMap.values());
+                    System.out.println("datesWithPurchasesCounterMap keys are:"+datesWithPurchasesCounterMap.keySet());
 
                     circular_progress.setVisibility(View.INVISIBLE);
-                    graph.setVisibility(View.VISIBLE);
+
 
 
                 } catch (Exception e) {

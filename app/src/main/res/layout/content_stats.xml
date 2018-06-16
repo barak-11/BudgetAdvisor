@@ -9,13 +9,13 @@
     tools:context=".StatsActivity"
     tools:showIn="@layout/activity_stats">
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph"
-        android:layout_width="match_parent"
-        android:layout_height="200dip"
-        android:layout_marginTop="55dp"
-        android:text="title" />
-
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/chart"
+        android:layout_width="500dp"
+        android:layout_height="566dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="88dp" />
     <ProgressBar
         android:id="@+id/circular_progress"
         style="@style/Widget.AppCompat.ProgressBar"

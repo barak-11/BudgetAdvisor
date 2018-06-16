@@ -1,6 +1,7 @@
 package com.budgetadviser.android.budgetadvisor;
 
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,8 +17,9 @@ public class Purchase {
     private String projectName;
     private double latitude;
     private double longitude;
+    private String timestamp;
 
-    public Purchase(String name, String uid, Integer price, String address, String dateTime, String projectName, double latitude, double longitude) {
+    public Purchase(String name, String uid, Integer price, String address, String dateTime, String projectName, double latitude, double longitude, String timestamp) {
         this.name = name;
         this.uid = uid;
         this.price = price;
@@ -26,9 +28,18 @@ public class Purchase {
         this.projectName = projectName;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.timestamp = timestamp;
     }
 
     public Purchase() {
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void String(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public double getLatitude() {

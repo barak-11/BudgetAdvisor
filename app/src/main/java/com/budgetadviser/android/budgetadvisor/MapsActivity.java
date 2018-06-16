@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,37 +35,35 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_maps);
-
-
-
-
-        //mMapView.setVisibility(View.INVISIBLE);
-
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Street View");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //adds the back arrow to the toolbar
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Bundle b = getIntent().getExtras();
-        latitude = b.getDouble("latitude");
-        longitude = b.getDouble("longitude");
+        try{
+            setContentView(R.layout.activity_maps);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar.setTitle("Street View");
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); //adds the back arrow to the toolbar
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            Bundle b = getIntent().getExtras();
+            latitude = b.getDouble("latitude");
+            longitude = b.getDouble("longitude");
 
 
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        fm = getSupportFragmentManager();
-        fm.beginTransaction()
-                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                .hide(mapFragment)
-                .commit();
-        mProgressBar = (ProgressBar) findViewById(R.id.circular_progress);
-        mProgressBar.setVisibility(View.VISIBLE);
+            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+            fm = getSupportFragmentManager();
+            fm.beginTransaction()
+                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                    .hide(mapFragment)
+                    .commit();
+            mProgressBar = (ProgressBar) findViewById(R.id.circular_progress);
+            mProgressBar.setVisibility(View.VISIBLE);
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), "MapsActivity error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("MapsActivity", "oStreetView error", e);
+        }
+
 
 
     }
@@ -80,19 +80,24 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        try{
+            mMap = googleMap;
+            //mMap.setVisibility(View.INVISIBLE);
+            // Add a marker in Sydney and move the camera
+            LatLng selectedPlace = new LatLng(latitude, longitude);
+            mMap.addMarker(new MarkerOptions().position(selectedPlace).title(""));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedPlace,14));
 
-        mMap = googleMap;
-        //mMap.setVisibility(View.INVISIBLE);
-        // Add a marker in Sydney and move the camera
-        LatLng selectedPlace = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(selectedPlace).title(""));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(selectedPlace));
+            fm.beginTransaction()
+                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                    .show(mapFragment)
+                    .commit();
+            mProgressBar.setVisibility(View.INVISIBLE);
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), "MapsActivity error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("MapsActivity", "oStreetView error", e);
+        }
 
-        fm.beginTransaction()
-                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                .show(mapFragment)
-                .commit();
-        mProgressBar.setVisibility(View.INVISIBLE);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -103,5 +108,9 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    @Override
+    public void onBackPressed() {
+
     }
 }

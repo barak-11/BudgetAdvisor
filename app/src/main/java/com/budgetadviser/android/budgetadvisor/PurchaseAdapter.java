@@ -155,7 +155,7 @@ public class PurchaseAdapter extends
             case "Groceries":
                 img.setImageResource(R.drawable.groceries);
                 break;
-            case "Cloths":
+            case "Clothes":
                 img.setImageResource(R.drawable.clothes);
                 break;
             case "Gifts":
