@@ -1,10 +1,8 @@
-package com.budgetadviser.android.budgetadvisor;
+package com.budgetadviser.android.budgetadvisor.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +10,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.budgetadviser.android.budgetadvisor.R;
+import com.budgetadviser.android.budgetadvisor.model.Purchase;
 import com.exblr.dropdownmenu.DropdownMenu;
 
-import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

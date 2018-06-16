@@ -11,12 +11,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.budgetadviser.android.budgetadvisor.adapters.ProjectAdapter;
+import com.budgetadviser.android.budgetadvisor.fragments.ProjectCreateDialogFragment;
+import com.budgetadviser.android.budgetadvisor.model.Project;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,11 +27,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class ProjectActivity extends BaseActivity {
     private ProgressBar circular_progress;
@@ -184,7 +184,10 @@ public class ProjectActivity extends BaseActivity {
         }
         return super.onContextItemSelected(item);
     }
+    @Override
+    public void onBackPressed() {
 
+    }
     /**
      *
      * this method overrides the back button on the mobile device, when a user

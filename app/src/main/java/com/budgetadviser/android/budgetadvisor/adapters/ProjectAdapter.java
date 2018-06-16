@@ -1,4 +1,4 @@
-package com.budgetadviser.android.budgetadvisor;
+package com.budgetadviser.android.budgetadvisor.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.budgetadviser.android.budgetadvisor.R;
+import com.budgetadviser.android.budgetadvisor.model.Project;
 
 import java.util.List;
 import java.util.Random;

@@ -1,17 +1,14 @@
 package com.budgetadviser.android.budgetadvisor;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Build;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,11 +23,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.budgetadviser.android.budgetadvisor.adapters.DropdownViewAdapter;
+import com.budgetadviser.android.budgetadvisor.adapters.PurchaseAdapter;
+import com.budgetadviser.android.budgetadvisor.model.Purchase;
 import com.exblr.dropdownmenu.DropdownListItem;
 import com.exblr.dropdownmenu.DropdownMenu;
 import com.google.android.gms.common.ConnectionResult;
@@ -53,13 +52,9 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.io.IOException;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -67,7 +62,6 @@ import java.util.UUID;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.util.Log.d;
-import static android.widget.LinearLayout.HORIZONTAL;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 

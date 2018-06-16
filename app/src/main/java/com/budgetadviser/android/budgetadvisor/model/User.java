@@ -1,4 +1,4 @@
-package com.budgetadviser.android.budgetadvisor;
+package com.budgetadviser.android.budgetadvisor.model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

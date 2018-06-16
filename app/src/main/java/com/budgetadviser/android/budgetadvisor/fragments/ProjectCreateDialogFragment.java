@@ -1,4 +1,4 @@
-package com.budgetadviser.android.budgetadvisor;
+package com.budgetadviser.android.budgetadvisor.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -18,9 +18,11 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.budgetadviser.android.budgetadvisor.MainActivity;
+import com.budgetadviser.android.budgetadvisor.R;
+import com.budgetadviser.android.budgetadvisor.model.Project;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;

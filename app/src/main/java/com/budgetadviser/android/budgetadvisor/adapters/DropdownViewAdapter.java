@@ -1,4 +1,4 @@
-package com.budgetadviser.android.budgetadvisor;
+package com.budgetadviser.android.budgetadvisor.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.budgetadviser.android.budgetadvisor.R;
 import com.exblr.dropdownmenu.DropdownListItem;
 
 import java.util.List;
