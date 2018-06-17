@@ -71,10 +71,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
     private EditText input_price;
     private DropdownMenu mDropdownMenu;
     private ProgressBar circular_progress;
-    private TextView projectTVtitle;
     private TextView projectTVoutput;
-    private TextView budgetTVtitle;
-    private TextView budgetTVoutput;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
@@ -350,6 +347,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         int position = -1;
         try {
             position = ((PurchaseAdapter) rvContacts.getAdapter()).getPosition();
+
         } catch (Exception e) {
             return super.onContextItemSelected(item);
         }
@@ -357,8 +355,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
             Intent myIntent;
             myIntent = new Intent(this, StreetViewActivity.class);
             Bundle b = new Bundle();
-            b.putDouble("latitude", latitude);
-            b.putDouble("longitude", longitude);
+            b.putDouble("latitude", list_purchases.get(position).getLatitude());
+            b.putDouble("longitude", list_purchases.get(position).getLongitude());
             myIntent.putExtras(b);
             //myIntent.putExtra("latitude",latitude);
             //myIntent.putExtra("longitude",longitude);
@@ -372,8 +370,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
             Intent myIntent;
             myIntent = new Intent(this, MapsActivity.class);
             Bundle b = new Bundle();
-            b.putDouble("latitude", latitude);
-            b.putDouble("longitude", longitude);
+            b.putDouble("latitude", list_purchases.get(position).getLatitude());
+            b.putDouble("longitude", list_purchases.get(position).getLongitude());
             myIntent.putExtras(b);
             myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(myIntent);
