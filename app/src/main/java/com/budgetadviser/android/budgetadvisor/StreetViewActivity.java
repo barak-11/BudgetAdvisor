@@ -17,6 +17,9 @@ import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.StreetViewPanoramaFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.StreetViewPanoramaLocation;
+
+import static android.Manifest.permission_group.LOCATION;
 
 public class StreetViewActivity extends AppCompatActivity implements OnStreetViewPanoramaReadyCallback {
     private static final LatLng SYDNEY = new LatLng(-33.87365, 151.20689);
@@ -47,13 +50,32 @@ public class StreetViewActivity extends AppCompatActivity implements OnStreetVie
 
     }
 
+
     @Override
-    public void onStreetViewPanoramaReady(StreetViewPanorama streetViewPanorama) {
-        try{
-            streetViewPanorama.setPosition(new LatLng(latitude,longitude));
-        }catch (Exception e){
+    public void onStreetViewPanoramaReady(final StreetViewPanorama panorama) {
+        try {
+
+            panorama.setPosition(new LatLng(latitude, longitude));
+            panorama.setOnStreetViewPanoramaChangeListener(new StreetViewPanorama.OnStreetViewPanoramaChangeListener() {
+                @Override
+                public void onStreetViewPanoramaChange(StreetViewPanoramaLocation loc) {
+                    if (loc != null && loc.links != null) {
+                        //panorama.setPosition(new LatLng(latitude, longitude));
+                    } else {
+                        Toast.makeText(StreetViewActivity.this, "No Street View Available For This Location", Toast.LENGTH_LONG)
+                                .show();
+                            Intent intent = new Intent(StreetViewActivity.this, MainActivity.class);
+                            startActivity(intent);
+                    }
+                }
+            });
+        }
+        catch (Exception e) {
             Toast.makeText(getApplicationContext(), "StreetView error:" + e.getMessage(), Toast.LENGTH_LONG).show();
             Log.e("StreetView", "oStreetView error", e);
+            Intent intent = new Intent(StreetViewActivity.this, MainActivity.class);
+            startActivity(intent);
+
         }
 
     }

@@ -302,11 +302,6 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
     private void updatePurchase(Purchase purchase) {
         mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("name").setValue(purchase.getName());
         mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("price").setValue(purchase.getPrice());
-        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("address").setValue(purchase.getAddress());
-        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("date").setValue(purchase.getDate());
-        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("projectName").setValue(purchase.getProjectName());
-        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("latitude").setValue(purchase.getLatitude());
-        mDatabaseReference.child("purchase").child(getUid()).child(purchase.getUid()).child("longitude").setValue(purchase.getLongitude());
         clearEditText();
     }
 
