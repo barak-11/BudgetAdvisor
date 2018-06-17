@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.budgetadviser.android.budgetadvisor.fragments.AmountOfPurchasesPerDayFragment;
+import com.budgetadviser.android.budgetadvisor.fragments.PurchasePieFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,17 @@ public class StatisticsActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                // Your code
+                finish();
+            }
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -47,8 +59,7 @@ public class StatisticsActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new AmountOfPurchasesPerDayFragment(), "ONE");
-        adapter.addFragment(new AmountOfPurchasesPerDayFragment(), "TWO");
-        adapter.addFragment(new AmountOfPurchasesPerDayFragment(), "THREE");
+        adapter.addFragment(new PurchasePieFragment(), "TWO");
         viewPager.setAdapter(adapter);
     }
 
