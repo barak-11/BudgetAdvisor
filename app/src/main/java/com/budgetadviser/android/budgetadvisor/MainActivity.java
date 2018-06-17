@@ -429,7 +429,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
         }
         else if(item.getItemId() == R.id.menu_graph){
             try{
-                Intent intent = new Intent(this, StatsActivity.class);
+                Intent intent = new Intent(this, StatisticsActivity.class);
                 startActivity(intent);
             }catch (Exception e){
                 Toast.makeText(getApplicationContext(),"Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
