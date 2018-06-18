@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.budgetadviser.android.budgetadvisor.fragments.AmountOfPurchasesPerDayFragment;
 import com.budgetadviser.android.budgetadvisor.fragments.PurchasePieFragment;
+import com.budgetadviser.android.budgetadvisor.fragments.TotalSpendingPerProductFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +59,9 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new AmountOfPurchasesPerDayFragment(), "ONE");
-        adapter.addFragment(new PurchasePieFragment(), "TWO");
+        adapter.addFragment(new AmountOfPurchasesPerDayFragment(), "Purchases per Day");
+        adapter.addFragment(new PurchasePieFragment(), "Purchases Distribution");
+        adapter.addFragment(new TotalSpendingPerProductFragment(), "Total per Product");
         viewPager.setAdapter(adapter);
     }
 

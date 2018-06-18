@@ -1,7 +1,6 @@
 package com.budgetadviser.android.budgetadvisor.fragments;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,14 +13,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.budgetadviser.android.budgetadvisor.R;
-import com.budgetadviser.android.budgetadvisor.model.MyValueFormatter;
 import com.budgetadviser.android.budgetadvisor.model.Purchase;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,14 +28,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class PurchasePieFragment extends Fragment {
+public class TotalSpendingPerProductFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private List<Purchase> list_purchases = new ArrayList<>();
@@ -45,7 +47,7 @@ public class PurchasePieFragment extends Fragment {
     SharedPreferences.Editor myEditor;
     private String projectName;
 
-    public PurchasePieFragment() {
+    public TotalSpendingPerProductFragment() {
         // Required empty public constructor
     }
 
@@ -53,17 +55,16 @@ public class PurchasePieFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        final View rootView = inflater.inflate(R.layout.purchase_pie_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.total_spending_per_product_fragment, container, false);
         myDBfile = rootView.getContext().getSharedPreferences("budgets", MODE_PRIVATE);
         Integer savedBudget = myDBfile.getInt("Budget", -1);
         projectName = myDBfile.getString("projectName", "Default Project");
+
         try {
             initFirebase();
             addEventFirebaseListener(rootView);
@@ -71,6 +72,7 @@ public class PurchasePieFragment extends Fragment {
             Toast.makeText(rootView.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
         return rootView;
+
     }
 
     @Override
@@ -104,48 +106,73 @@ public class PurchasePieFragment extends Fragment {
                         }
                     }
 
-                    Map<String,Integer> productsWithCounter = new HashMap<>();
-                    int tempCounter=0;
+                    Map<String,Integer> productsWithTotalsMap = new HashMap<>();
+                    int tempTotal;
                     for (Purchase pur : list_purchases){
-                        tempCounter=0;
-                        if (productsWithCounter.containsKey(pur.getName())){
-                            tempCounter = productsWithCounter.get(pur.getName());
-                            tempCounter++;
-                            productsWithCounter.put(pur.getName(),tempCounter);
+                        tempTotal=0;
+                        if (productsWithTotalsMap.containsKey(pur.getName())){
+                            tempTotal=productsWithTotalsMap.get(pur.getName());
+                            tempTotal=tempTotal+pur.getPrice();
+                            productsWithTotalsMap.put(pur.getName(),tempTotal);
                         }
                         else {
-                            tempCounter=1;
-                            productsWithCounter.put(pur.getName(),tempCounter);
+                            tempTotal=pur.getPrice();
+                            productsWithTotalsMap.put(pur.getName(),tempTotal);
                         }
                     }
-                    tempCounter=0;
-                    List<PieEntry> yvalues = new ArrayList<>();
-                    ArrayList<String> xVals = new ArrayList<>();
-                    for (String str : productsWithCounter.keySet()) {
-                        xVals.add(str);
-                        yvalues.add(new PieEntry(productsWithCounter.get(str),str));
-                        tempCounter++;
+
+
+                    BarChart chart = rootView.findViewById(R.id.chart);
+                    List<BarEntry> entries = new ArrayList<>();
+                    List<String> labels = new ArrayList<>();
+                    int counter = 0;
+                    for (String str : productsWithTotalsMap.keySet()) {
+                        labels.add(str);
+                        entries.add(new BarEntry(counter,productsWithTotalsMap.get(str)));
+                        counter++;
                     }
-                    PieChart pieChart = rootView.findViewById(R.id.piechart);
-                    PieDataSet dataSet = new PieDataSet(yvalues, "Purchases");
-                    dataSet.setValueFormatter(new MyValueFormatter());
 
-                    dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
-                    PieData data = new PieData(dataSet);
-                    pieChart.setDrawHoleEnabled(false);
-                    data.setValueTextSize(13f);
-                    data.setValueTextColor(Color.DKGRAY);
-                    pieChart.animateXY(1400, 1400);
-                    pieChart.setData(data);
-                    pieChart.invalidate(); // refresh
+                    XAxis bottomAxis = chart.getXAxis();
 
-                    //System.out.println("productsWithCounter values are:"+productsWithCounter.values());
-                    //System.out.println("productsWithCounter keys are:"+productsWithCounter.keySet());
+                    bottomAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+                    bottomAxis.setLabelCount(entries.size());
+                    bottomAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                    bottomAxis.setDrawLabels(true);
+                    bottomAxis.setDrawGridLines(false);
+                    bottomAxis.setDrawAxisLine(true);
+                    bottomAxis.setGranularity(1f);
+                    bottomAxis.setEnabled(true);
+
+
+                    YAxis rightYAxis = chart.getAxisRight();
+                    rightYAxis.setEnabled(false);
+                    YAxis leftYAxis = chart.getAxisLeft();
+                    leftYAxis.setAxisMinimum(0);
+                    
+                    BarDataSet set = new BarDataSet(entries, "Total Amounts per Product");
+                    BarData data = new BarData(set);
+
+                    data.setBarWidth(0.5f); // set custom bar width
+                    chart.setData(data);
+                    chart.setDescription(null);
+                    chart.setPinchZoom(false);
+                    chart.setScaleEnabled(false);
+                    chart.setDrawBarShadow(false);
+                    chart.setDrawGridBackground(false);
+                    chart.animateY(2000);
+                    chart.getData().setValueTextSize(10);
+                    chart.getLegend().setEnabled(true);
+
+                    chart.invalidate(); // refresh
+
+                    System.out.println("productsWithTotalsMap values are:"+productsWithTotalsMap.values());
+                    System.out.println("productsWithTotalsMap keys are:"+productsWithTotalsMap.keySet());
 
 
                 } catch (Exception e) {
-                    Toast.makeText(rootView.getContext(), "onDataChange() error:" + e.getMessage(), Toast.LENGTH_LONG).show();
                     Log.e("Budget", "onDataChange() error", e);
+                    Toast.makeText(rootView.getContext(), "onDataChange() error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+
 
                 }
             }

@@ -223,7 +223,10 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                     final TextView budget_tv = (TextView) findViewById(R.id.budget_title_name);
                     remainedBudget = budget - currentSpendings;
                     currentSpendings=0;
+                    if (remainedBudget>0)
+                        budget_tv.setTextColor(getResources().getColor(R.color.colorGreen));
                     budget_tv.setText(remainedBudget.toString()+currency);
+
 
                     rvContacts = (RecyclerView) findViewById(R.id.rvContacts);
                     PurchaseAdapter pAdapter = new PurchaseAdapter(list_purchases);

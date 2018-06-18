@@ -9,5 +9,6 @@
     <color name="icons">#212121</color>
     <color name="divider">#B6B6B6</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorGreen">#009900</color>
 
 </resources>

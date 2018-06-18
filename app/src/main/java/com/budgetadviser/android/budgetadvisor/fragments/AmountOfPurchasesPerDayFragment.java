@@ -160,11 +160,16 @@ public class AmountOfPurchasesPerDayFragment extends Fragment {
                     bottomAxis.setLabelCount(entries.size());
                     bottomAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                     bottomAxis.setDrawLabels(true);
+                    bottomAxis.setGranularity(1f);
+
                     bottomAxis.setDrawGridLines(false);
                     bottomAxis.setDrawAxisLine(true);
 
 
                     YAxis rightYAxis = chart.getAxisRight();
+
+                    YAxis leftYAxis = chart.getAxisLeft();
+                    leftYAxis.setAxisMinimum(0);
 
                     rightYAxis.setEnabled(false);
                     BarDataSet set = new BarDataSet(entries, "Amount of Purchases");
@@ -177,7 +182,7 @@ public class AmountOfPurchasesPerDayFragment extends Fragment {
                     chart.setScaleEnabled(false);
                     chart.setDrawBarShadow(false);
                     chart.setDrawGridBackground(false);
-                    chart.animateY(2000);
+                    chart.animateY(1000);
                     chart.getData().setValueTextSize(10);
                     chart.getLegend().setEnabled(true);
 
