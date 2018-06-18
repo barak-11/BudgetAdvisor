@@ -54,23 +54,24 @@ public class AmountOfPurchasesPerDayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myDBfile = this.getActivity().getSharedPreferences("budgets", MODE_PRIVATE);
-        Integer savedBudget = myDBfile.getInt("Budget", -1);
-        projectName = myDBfile.getString("projectName", "Default Project");
 
-        try {
-            initFirebase();
-            addEventFirebaseListener();
-        }catch (Exception e){
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.amount_of_purchases_per_day_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.amount_of_purchases_per_day_fragment, container, false);
+        myDBfile = rootView.getContext().getSharedPreferences("budgets", MODE_PRIVATE);
+        Integer savedBudget = myDBfile.getInt("Budget", -1);
+        projectName = myDBfile.getString("projectName", "Default Project");
+
+        try {
+            initFirebase();
+            addEventFirebaseListener(rootView);
+        }catch (Exception e){
+            Toast.makeText(rootView.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        return rootView;
 
     }
     @Override
@@ -78,11 +79,11 @@ public class AmountOfPurchasesPerDayFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
     private void initFirebase() {
-        FirebaseApp.initializeApp(getContext());
+        FirebaseApp.initializeApp(getActivity());
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference  = mFirebaseDatabase.getReference();
     }
-    private void addEventFirebaseListener() {
+    private void addEventFirebaseListener(final View rootView) {
         //Progressing
 
 
@@ -142,7 +143,7 @@ public class AmountOfPurchasesPerDayFragment extends Fragment {
                     }
 
 
-                    BarChart chart = (BarChart) getActivity().findViewById(R.id.chart);
+                    BarChart chart = rootView.findViewById(R.id.chart);
                     List<BarEntry> entries = new ArrayList<>();
                     List<String> labels = new ArrayList<>();
                     Collections.sort(myStringList);
@@ -189,8 +190,9 @@ public class AmountOfPurchasesPerDayFragment extends Fragment {
 
 
                 } catch (Exception e) {
-                    Toast.makeText(getContext(), "onDataChange() error:" + e.getMessage(), Toast.LENGTH_LONG).show();
                     Log.e("Budget", "onDataChange() error", e);
+                    Toast.makeText(rootView.getContext(), "onDataChange() error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+
 
                 }
             }

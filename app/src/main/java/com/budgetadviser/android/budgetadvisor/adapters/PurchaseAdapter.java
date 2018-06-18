@@ -167,6 +167,12 @@ public class PurchaseAdapter extends
             case "Other":
                 img.setImageResource(R.drawable.other);
                 break;
+            case "Drinks":
+                img.setImageResource(R.drawable.glass);
+                break;
+            case "Dinner":
+                img.setImageResource(R.drawable.dinner);
+                break;
             default:
 
         }

@@ -273,8 +273,8 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                     llm.setReverseLayout(true); // in order to display the database records ordered by newest to oldest
                     llm.setStackFromEnd(true); // in order to display the database records ordered by newest to oldest
 
-                    DividerItemDecoration itemDecor = new DividerItemDecoration(getApplicationContext(),llm.getOrientation()); //Adding line separator
-                    rvContacts.addItemDecoration(itemDecor);
+                    //DividerItemDecoration itemDecor = new DividerItemDecoration(getApplicationContext(),llm.getOrientation()); //Adding line separator
+                    //rvContacts.addItemDecoration(itemDecor);
                     rvContacts.setLayoutManager(llm);
                     rvContacts.setAdapter(pAdapter);
                     // Set layout manager to position the items
