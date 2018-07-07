@@ -117,6 +117,7 @@ public class PurchaseAdapter extends
             contextMenu.setHeaderTitle("Select an Action");
             contextMenu.add(0, view.getId(), 0, "Show in Street View");//groupId, itemId, order, title
             contextMenu.add(0, view.getId(), 0, "Show in Map");
+            contextMenu.add(0, view.getId(), 0, "Edit Record");
         }
     }
 

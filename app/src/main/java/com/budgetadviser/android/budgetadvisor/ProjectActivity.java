@@ -60,15 +60,12 @@ public class ProjectActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                //createProject();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 ProjectCreateDialogFragment newFragment = new ProjectCreateDialogFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.replace(R.id.placeholder_layout, newFragment).addToBackStack(null).commit(); // newInstance() is a static factory method.
-
-
             }
         });
         circular_progress = (ProgressBar)findViewById(R.id.circular_progress);
