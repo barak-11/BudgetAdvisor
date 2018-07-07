@@ -148,11 +148,11 @@ public class TotalSpendingPerProductFragment extends Fragment {
                     rightYAxis.setEnabled(false);
                     YAxis leftYAxis = chart.getAxisLeft();
                     leftYAxis.setAxisMinimum(0);
-                    
+
                     BarDataSet set = new BarDataSet(entries, "Total Amounts per Product");
                     BarData data = new BarData(set);
 
-                    data.setBarWidth(0.5f); // set custom bar width
+                    data.setBarWidth(0.9f); // set custom bar width
                     chart.setData(data);
                     chart.setDescription(null);
                     chart.setPinchZoom(false);
@@ -162,6 +162,8 @@ public class TotalSpendingPerProductFragment extends Fragment {
                     chart.animateY(2000);
                     chart.getData().setValueTextSize(10);
                     chart.getLegend().setEnabled(true);
+
+                    chart.setFitBars(true);
 
                     chart.invalidate(); // refresh
 

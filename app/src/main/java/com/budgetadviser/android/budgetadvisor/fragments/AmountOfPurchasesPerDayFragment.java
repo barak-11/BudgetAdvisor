@@ -175,7 +175,7 @@ public class AmountOfPurchasesPerDayFragment extends Fragment {
                     BarDataSet set = new BarDataSet(entries, "Amount of Purchases");
                     BarData data = new BarData(set);
 
-                    data.setBarWidth(0.5f); // set custom bar width
+                    data.setBarWidth(0.8f); // set custom bar width
                     chart.setData(data);
                     chart.setDescription(null);
                     chart.setPinchZoom(false);
@@ -185,6 +185,7 @@ public class AmountOfPurchasesPerDayFragment extends Fragment {
                     chart.animateY(1000);
                     chart.getData().setValueTextSize(10);
                     chart.getLegend().setEnabled(true);
+                    chart.setFitBars(true);
 
                     chart.invalidate(); // refresh
 

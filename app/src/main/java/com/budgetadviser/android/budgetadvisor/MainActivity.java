@@ -209,11 +209,22 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemSele
                             String name_str = postSnapshot.child("name").getValue().toString();
                             String uid_str = postSnapshot.child("uid").getValue().toString();
                             String address_str = postSnapshot.child("address").getValue().toString();
-                            String price_str = postSnapshot.child("price").getValue().toString();
-                            String project_str = postSnapshot.child("projectName").getValue().toString();
                             double longitude = Double.valueOf(postSnapshot.child("longitude").getValue().toString());
                             double latitude = Double.valueOf(postSnapshot.child("latitude").getValue().toString());
+                            if (address_str.matches("")){
+                                Geocoder geocoder;
+                                List<Address> addresses;
+                                geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                address_str = addresses.get(0).getAddressLine(0);
+                            }
+                            if (address_str.matches("")){
+                                address_str="can't convert LatLng to Address";
+                            }
+                            String price_str = postSnapshot.child("price").getValue().toString();
+                            String project_str = postSnapshot.child("projectName").getValue().toString();
                             String timestamp_str = postSnapshot.child("timestamp").getValue().toString();
+
                             Purchase purchase = new Purchase(name_str, uid_str, Integer.valueOf(price_str), address_str,date_str,project_str,latitude,longitude,timestamp_str);
                             list_purchases.add(purchase);
                             currentSpendings+=Integer.valueOf(postSnapshot.child("price").getValue().toString());
